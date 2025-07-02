@@ -1,3 +1,23 @@
 <resources>
     <string name="app_name">FortiPass</string>
+    <string name="favorite">Избранное</string>
+    <string name="storage">Хранилище</string>
+    <string name="edit">Изменить</string>
+    <string name="add">Добавить</string>
+    <string name="title_account">Название элемента</string>
+    <string name="choose_directory">Выбор папки</string>
+    <string name="name_account">Имя пользователя</string>
+    <string name="password">Пароль</string>
+    <string name="site_name">Сайт (URI)</string>
+    <string name="data_for_authorization">ДАННЫЕ ДЛЯ АВТОРИЗАЦИИ</string>
+    <string name="options_for_autocompletion">ПАРАМЕТРЫ ДЛЯ АВТОЗАПОЛНЕНИЯ</string>
+    <string name="add_title_change">Создать</string>
+    <string name="details">Просмотр</string>
+    <string name="copied">Скопировано</string>
+    <string name="wrong_link">Не удалось перейти по ссылке</string>
+    <string name="type">Тип</string>
+    <string name="login">Логин</string>
+    <string name="directory">Папка</string>
+    <string name="generator">Генератор</string>
+    <string name="setting">Настройки</string>
 </resources>

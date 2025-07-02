@@ -1,0 +1,266 @@
+package com.hocok.fortipass.presentation.account.details
+
+import android.content.ClipData
+import android.content.Context
+import android.util.Log
+import android.widget.Toast
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.ClipEntry
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.hocok.fortipass.R
+import com.hocok.fortipass.presentation.account.components.AccountInfoWrapper
+import com.hocok.fortipass.presentation.directory.components.DirectoryContainer
+import com.hocok.fortipass.presentation.directory.components.DirectoryText
+import com.hocok.fortipass.presentation.ui.ActionIcon
+import com.hocok.fortipass.presentation.ui.TopBarTitles
+import com.hocok.fortipass.presentation.ui.bottomRoundedCorner
+import com.hocok.fortipass.presentation.ui.components.DecoratorFloatingButton
+import com.hocok.fortipass.presentation.ui.components.TopBarComponent
+import com.hocok.fortipass.presentation.ui.theme.FortiPassTheme
+import com.hocok.fortipass.presentation.ui.theme.onSecondColor
+import com.hocok.fortipass.presentation.ui.theme.secondaryTextColor
+import com.hocok.fortipass.presentation.ui.theme.selectedItemColor
+import com.hocok.fortipass.presentation.ui.topRoundedCorner
+
+private fun makeCopyToast(context: Context){
+    Toast.makeText(context, context.getString(R.string.copied),Toast.LENGTH_SHORT).show()
+}
+
+private fun copyTextToClip(text: String): ClipEntry{
+    val clipData = ClipData.newPlainText("plain text", text)
+    return ClipEntry(clipData)
+}
+
+@Composable
+fun DetailsAccountPage(
+    onBack: () -> Unit,
+    onEdit: () -> Unit,
+    modifier: Modifier = Modifier,
+){
+
+    val viewModel = hiltViewModel<DetailsAccountViewModel>()
+    val state by viewModel.state.collectAsState()
+
+    AccountDetailsPageContent(
+        isFavorite = state.account.isFavorite,
+        accountTitle = state.account.title,
+        login = state.account.login,
+        password = state.account.password,
+        siteLink = state.account.siteLink,
+        isPasswordVisible = state.isPasswordVisible,
+        changePasswordVisible = {viewModel.onEvent(DetailsAccountEvent.ChangePasswordVisible)},
+        onBack = onBack,
+        onEdit = onEdit,
+        modifier = modifier,
+    )
+}
+
+@Composable
+private fun AccountDetailsPageContent(
+    isFavorite: Boolean,
+    accountTitle: String,
+    login: String,
+    password: String,
+    siteLink : String,
+    isPasswordVisible: Boolean,
+    changePasswordVisible: () -> Unit,
+    onBack: () -> Unit,
+    onEdit: () -> Unit,
+    modifier: Modifier = Modifier,
+){
+    val clipManager = LocalClipboardManager.current
+    val context = LocalContext.current
+    val uriHandler = LocalUriHandler.current
+
+    Scaffold(
+        topBar = {
+            TopBarComponent(
+                title = TopBarTitles.DETAILS,
+                back = ActionIcon(
+                    iconRes = R.drawable.close,
+                    onClick = onBack
+                )
+            )
+        },
+        floatingActionButton = {
+            DecoratorFloatingButton(
+                actionIcon = ActionIcon(
+                    iconRes = R.drawable.edit,
+                    onClick = onEdit
+                )
+            )
+        },
+        modifier = modifier
+    ) { contentPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(contentPadding)
+                .padding(horizontal = 20.dp),
+        ) {
+
+            Spacer(Modifier.height(10.dp))
+            AccountInfoWrapper(
+                title = stringResource(R.string.title_account),
+                action = listOf(
+                    ActionIcon(iconRes = R.drawable.star,
+                        onClick = { /*On Details don't need to do nothing*/ },
+                        color = if (isFavorite) selectedItemColor
+                        else onSecondColor
+                    )
+                ),
+                modifier = Modifier.padding(bottom = 1.dp).clip(topRoundedCorner)
+            ){
+                DetailText(
+                    text = accountTitle
+                )
+            }
+
+            AccountInfoWrapper(
+                title = stringResource(R.string.choose_directory),
+                action = listOf(
+                    ActionIcon(iconRes = R.drawable.expand, onClick = {
+                        /*TODO("To directory")*/
+                    })
+                ),
+                modifier = Modifier.clip(bottomRoundedCorner)
+            ){
+                /*TODO("Replace with account directory")*/
+                DirectoryText(
+                    text = "Без папки"
+                )
+            }
+
+
+            Spacer(Modifier.height(10.dp))
+            Text(
+                text = stringResource(R.string.options_for_autocompletion),
+                style = MaterialTheme.typography.bodyLarge,
+                color = secondaryTextColor,
+            )
+            Spacer(Modifier.height(10.dp))
+            AccountInfoWrapper(
+                title = stringResource(R.string.name_account),
+                action = listOf(ActionIcon(
+                    iconRes = R.drawable.copy,
+                    onClick = {
+                        clipManager.setClip(copyTextToClip(login))
+                        makeCopyToast(context)
+                    })
+                ),
+                modifier = Modifier.padding(bottom = 1.dp).clip(topRoundedCorner)
+            ){
+                DetailText(
+                    text = login,
+                )
+            }
+            AccountInfoWrapper(
+                title = stringResource(R.string.password),
+                action = listOf(
+                    ActionIcon(
+                        iconRes =   if (isPasswordVisible) R.drawable.visibility
+                        else R.drawable.visibility_off,
+                        onClick = changePasswordVisible
+                    ),
+                    ActionIcon(
+                        iconRes = R.drawable.copy,
+                        onClick = {
+                            clipManager.setClip(copyTextToClip(password))
+                            makeCopyToast(context)
+                        }),
+                ),
+                modifier = Modifier.clip(bottomRoundedCorner)
+            ){
+                DetailText(
+                    text = password,
+                )
+            }
+
+            Spacer(Modifier.height(10.dp))
+            Text(
+                text = stringResource(R.string.options_for_autocompletion),
+                style = MaterialTheme.typography.bodyLarge,
+                color = secondaryTextColor,
+            )
+            Spacer(Modifier.height(10.dp))
+            AccountInfoWrapper(
+                title = stringResource(R.string.site_name),
+                action = listOf(
+                    ActionIcon(
+                        iconRes = R.drawable.gotoweb,
+                        onClick = {
+                            try {
+                                uriHandler.openUri(siteLink)
+                            } catch (e: Exception){
+                                e.message?.let { it1 -> Log.e("Error link", it1) }
+                                Toast.makeText(context, context.getString(R.string.wrong_link), Toast.LENGTH_SHORT).show()
+                            }
+                        })
+                ),
+                modifier = Modifier.clip(topRoundedCorner).clip(bottomRoundedCorner)
+            ){
+                DetailText(
+                    text = siteLink,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun DetailText(
+    text: String,
+    modifier: Modifier = Modifier,
+){
+    SelectionContainer(
+        modifier = modifier
+    ) {
+        Text(
+            text = text,
+            modifier = Modifier,
+            color = onSecondColor,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            style = MaterialTheme.typography.bodySmall
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun DetailPagePreview(){
+    FortiPassTheme {
+        AccountDetailsPageContent(
+            isFavorite = false,
+            accountTitle = "GitHub",
+            login = "exampleLogin",
+            password = "qwerty123",
+            siteLink = "github.com",
+            isPasswordVisible = false,
+            changePasswordVisible = {},
+            onBack = {},
+            onEdit = {},
+        )
+    }
+}
