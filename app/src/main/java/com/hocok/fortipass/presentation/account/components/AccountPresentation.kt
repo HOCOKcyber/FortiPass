@@ -1,6 +1,5 @@
 package com.hocok.fortipass.presentation.account.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,7 +18,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -27,6 +25,7 @@ import com.hocok.fortipass.R
 import com.hocok.fortipass.domain.model.Account
 import com.hocok.fortipass.presentation.ui.ActionIcon
 import com.hocok.fortipass.presentation.ui.theme.FortiPassTheme
+import com.hocok.fortipass.presentation.ui.theme.mainTextColor
 import com.hocok.fortipass.presentation.ui.theme.onSecondColor
 import com.hocok.fortipass.presentation.ui.theme.secondColor
 import com.hocok.fortipass.presentation.ui.theme.selectedItemColor
@@ -89,10 +88,10 @@ private fun AccountImage(
         modifier = modifier.size(33.dp)
             .clip(RoundedCornerShape(10.dp))
     ){
-        Image(
-            painter = painterResource( R.drawable.gitimage ),
+        Icon(
+            painter = painterResource( R.drawable.account ),
             contentDescription = null,
-            contentScale = ContentScale.Crop,
+            tint = mainTextColor,
             modifier = Modifier.fillMaxSize()
         )
     }

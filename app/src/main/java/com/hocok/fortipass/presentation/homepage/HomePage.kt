@@ -17,8 +17,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Switch
-import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -43,6 +41,7 @@ import com.hocok.fortipass.presentation.directory.components.DirectoryContainer
 import com.hocok.fortipass.presentation.directory.components.DirectoryText
 import com.hocok.fortipass.presentation.ui.ActionIcon
 import com.hocok.fortipass.presentation.ui.TopBarTitles
+import com.hocok.fortipass.presentation.ui.components.CustomSwitchButton
 import com.hocok.fortipass.presentation.ui.components.DecoratorFloatingButton
 import com.hocok.fortipass.presentation.ui.components.TopBarComponent
 import com.hocok.fortipass.presentation.ui.theme.FortiPassTheme
@@ -127,7 +126,8 @@ private fun HomePageContent(
             if (isAccountsDisplay){
                 ShowFavorite(
                     modifier = Modifier
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .padding(vertical = 10.dp),
                     isChecked = isFavoriteDisplay,
                     onSwitch = changeFavoriteDisplay
                 )
@@ -187,15 +187,12 @@ private fun ShowFavorite(
             text = stringResource(R.string.favorite),
             style = MaterialTheme.typography.labelMedium
         )
-        Switch(
+        CustomSwitchButton(
             checked = isChecked,
             onCheckedChange = onSwitch,
-            colors = SwitchDefaults.colors(
-                checkedThumbColor = MaterialTheme.colorScheme.background,
-                checkedTrackColor = MaterialTheme.colorScheme.secondary,
-                uncheckedThumbColor = MaterialTheme.colorScheme.background,
-                uncheckedTrackColor = MaterialTheme.colorScheme.secondary,
-            ),
+            switchPadding = 6.dp,
+            buttonHeight = 25.dp,
+            buttonWidth = 50.dp
         )
     }
 }
@@ -277,9 +274,9 @@ private fun DialogSelectTypeToAddPreview(){
 private fun HomePagePreview(){
     FortiPassTheme {
         HomePageContent(
-            isFavoriteDisplay = false,
+            isFavoriteDisplay = true,
             isDialogDisplay = false,
-            isAccountsDisplay = false,
+            isAccountsDisplay = true,
             accountsList = ExampleAccount.listOfAccount,
             directoryList = ExampleDirectory.listOfDirectory,
             changeSpecificAccountFavorite = {_, _ ->},

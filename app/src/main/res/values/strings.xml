@@ -14,10 +14,22 @@
     <string name="add_title_change">Создать</string>
     <string name="details">Просмотр</string>
     <string name="copied">Скопировано</string>
+    <string name="copy">Скопировать</string>
     <string name="wrong_link">Не удалось перейти по ссылке</string>
     <string name="type">Тип</string>
     <string name="login">Логин</string>
     <string name="directory">Папка</string>
     <string name="generator">Генератор</string>
     <string name="setting">Настройки</string>
+    <string name="random_password">Случайный</string>
+    <string name="mask_password">Маска</string>
+    <string name="length">Длина</string>
+    <string name="exclude_similar_symbols">Исключить неоднозначные символы</string>
+    <string name="upper_case">заглавные</string>
+    <string name="lower_case">строчные</string>
+    <string name="numbers">цифры</string>
+    <string name="symbols">специальные символы</string>
+    <string name="random_not_special">случайный не специальный символ</string>
+    <string name="fixed_set">фиксированный набор</string>
+    <string name="start_enter_mask">Начите вводить маску</string>
 </resources>

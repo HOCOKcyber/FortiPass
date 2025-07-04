@@ -1,5 +1,6 @@
 package com.hocok.fortipass.presentation.navigation
 
+import android.util.Log
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
@@ -27,11 +28,13 @@ import androidx.navigation.toRoute
 import com.hocok.fortipass.presentation.account.addedit.AddEditAccountPage
 import com.hocok.fortipass.presentation.account.details.DetailsAccountPage
 import com.hocok.fortipass.presentation.directory.addedit.AddEditDirectoryPage
+import com.hocok.fortipass.presentation.generator.GeneratorPage
 import com.hocok.fortipass.presentation.homepage.HomePage
 import com.hocok.fortipass.presentation.ui.TopBarTitles
 import com.hocok.fortipass.presentation.ui.theme.onSecondColor
 import com.hocok.fortipass.presentation.ui.theme.secondColor
 import com.hocok.fortipass.presentation.ui.theme.selectedItemColor
+import com.hocok.fortipass.util.PASSWORD_KEY
 
 
 @Composable
@@ -62,9 +65,23 @@ fun FortiPassNavHost(
                 )
             }
 
-            composable<Routes.Generator> {
-                Text(
-                    text = stringResource(TopBarTitles.GENERATOR.strId),
+            composable<Routes.Generator> {backStack ->
+                val isFromAddEdit = backStack.toRoute<Routes.Generator>().isFromAddEdit
+
+                val savePasswordFromGenerator: (String) -> Unit = {newPassword ->
+                        navController
+                            .previousBackStackEntry
+                            ?.savedStateHandle
+                            ?.set(PASSWORD_KEY, newPassword)
+                    Log.d("Set from generator", newPassword)
+                        navController.popBackStack()
+                }
+
+                GeneratorPage(
+                    onBack = {navController.navigateUp()},
+                    modifier = Modifier.padding(contentPadding),
+                    isFromAddEdit = isFromAddEdit,
+                    savePasswordFromGenerator = savePasswordFromGenerator,
                 )
             }
             composable<Routes.Setting> {
@@ -76,6 +93,8 @@ fun FortiPassNavHost(
             composable<Routes.AddEditAccount>{
                 val backEntryId = it.toRoute<Routes.AddEditAccount>().id
 
+                val password = it.savedStateHandle.get<String>(PASSWORD_KEY) ?: ""
+
                 val title = if (backEntryId == null) TopBarTitles.ADD
                             else TopBarTitles.EDIT
 
@@ -83,7 +102,8 @@ fun FortiPassNavHost(
                 AddEditAccountPage(
                     title = title,
                     onBack = {navController.navigateUp()},
-                    toGenerator = {navController.navigate(Routes.Generator)},
+                    password = password,
+                    toGenerator = {navController.navigate(Routes.Generator(isFromAddEdit = true))},
                 )
             }
 

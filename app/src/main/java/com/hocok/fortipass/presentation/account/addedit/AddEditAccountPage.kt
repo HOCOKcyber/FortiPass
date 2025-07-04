@@ -14,6 +14,7 @@ import androidx.compose.material.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -47,12 +48,17 @@ import com.hocok.fortipass.presentation.ui.topRoundedCorner
 @Composable
 fun AddEditAccountPage(
     title: TopBarTitles,
+    password: String,
     onBack: () -> Unit,
     toGenerator: () -> Unit,
     modifier: Modifier = Modifier,
 ){
     val viewModel: AddEditAccountViewModel = hiltViewModel()
     val state by viewModel.state.collectAsState()
+
+    LaunchedEffect(password) {
+        viewModel.onEvent(AddEditAccountEvent.ChangePassword(password))
+    }
 
     AddEditAccountPageContent(
         title = title,

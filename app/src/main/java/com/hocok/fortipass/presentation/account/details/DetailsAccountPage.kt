@@ -9,11 +9,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -30,7 +29,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hocok.fortipass.R
 import com.hocok.fortipass.presentation.account.components.AccountInfoWrapper
-import com.hocok.fortipass.presentation.directory.components.DirectoryContainer
 import com.hocok.fortipass.presentation.directory.components.DirectoryText
 import com.hocok.fortipass.presentation.ui.ActionIcon
 import com.hocok.fortipass.presentation.ui.TopBarTitles
@@ -155,7 +153,7 @@ private fun AccountDetailsPageContent(
 
             Spacer(Modifier.height(10.dp))
             Text(
-                text = stringResource(R.string.options_for_autocompletion),
+                text = stringResource(R.string.data_for_authorization),
                 style = MaterialTheme.typography.bodyLarge,
                 color = secondaryTextColor,
             )
@@ -194,6 +192,7 @@ private fun AccountDetailsPageContent(
             ){
                 DetailText(
                     text = password,
+                    isTextVisible = isPasswordVisible,
                 )
             }
 
@@ -232,17 +231,18 @@ private fun AccountDetailsPageContent(
 private fun DetailText(
     text: String,
     modifier: Modifier = Modifier,
+    isTextVisible: Boolean = true,
 ){
     SelectionContainer(
         modifier = modifier
     ) {
         Text(
-            text = text,
+            text = if (isTextVisible) text else "*".repeat(text.length),
             modifier = Modifier,
             color = onSecondColor,
             maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            style = MaterialTheme.typography.bodySmall
+            overflow = if (isTextVisible) TextOverflow.Ellipsis else TextOverflow.Clip,
+            style = MaterialTheme.typography.bodySmall,
         )
     }
 }

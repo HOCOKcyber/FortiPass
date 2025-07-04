@@ -2,11 +2,11 @@ package com.hocok.fortipass.core
 
 import android.app.Application
 import androidx.room.Room
-import androidx.room.RoomDatabase
 import com.hocok.fortipass.data.data_source.AccountDao
 import com.hocok.fortipass.data.data_source.AccountDataBase
 import com.hocok.fortipass.data.repository.AccountRepositoryImp
 import com.hocok.fortipass.domain.usecase.ChangeFavoriteById
+import com.hocok.fortipass.domain.usecase.CreatePassword
 import com.hocok.fortipass.domain.usecase.GetAccountById
 import com.hocok.fortipass.domain.usecase.GetAccounts
 import com.hocok.fortipass.domain.usecase.GetDirectories
@@ -79,5 +79,11 @@ object AppModule {
     @Singleton
     fun provideUseCaseSaveDirectory(repositoryImp: AccountRepositoryImp): SaveDirectory {
         return SaveDirectory(repositoryImp)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUseCaseCreatePassword(): CreatePassword{
+        return CreatePassword()
     }
 }

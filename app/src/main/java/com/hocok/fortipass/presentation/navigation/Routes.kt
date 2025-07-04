@@ -8,7 +8,7 @@ sealed class Routes {
     @Serializable
     data object Home: Routes()
     @Serializable
-    data object Generator: Routes()
+    data class Generator(val isFromAddEdit: Boolean = false): Routes()
     @Serializable
     data object Setting: Routes()
     @Serializable
@@ -26,6 +26,6 @@ data class BottomRoutes(
 
 val bottomRoutesList = listOf(
     BottomRoutes(iconRes = R.drawable.storage, route = Routes.Home),
-    BottomRoutes(iconRes = R.drawable.lock, route = Routes.Generator),
+    BottomRoutes(iconRes = R.drawable.lock, route = Routes.Generator()),
     BottomRoutes(iconRes = R.drawable.setting, route = Routes.Setting),
 )

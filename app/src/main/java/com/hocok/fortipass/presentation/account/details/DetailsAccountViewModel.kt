@@ -53,7 +53,7 @@ class DetailsAccountViewModel @Inject constructor(
 
 data class DetailsAccountState(
     val account: Account = Account(),
-    val isPasswordVisible: Boolean = true,
+    val isPasswordVisible: Boolean = false,
 )
 
 sealed class DetailsAccountEvent(){
