@@ -13,14 +13,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.hocok.fortipass.presentation.ui.ActionIcon
-import com.hocok.fortipass.presentation.ui.TopBarTitles
 
 @Composable
 fun TopBarComponent(
-    title: TopBarTitles,
+    title: String,
     modifier: Modifier = Modifier,
     back: ActionIcon? = null,
     action: List<ActionIcon> = emptyList()
@@ -45,8 +44,9 @@ fun TopBarComponent(
                 }
             }
             Text(
-                text = stringResource( title.strId ),
+                text = title,
                 style = MaterialTheme.typography.titleMedium,
+                overflow = TextOverflow.Ellipsis
             )
             Spacer(Modifier.weight(1f))
             action.forEach {

@@ -8,15 +8,21 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Text
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
@@ -31,7 +37,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hocok.fortipass.R
+import com.hocok.fortipass.domain.model.Account
+import com.hocok.fortipass.domain.model.Directory
+import com.hocok.fortipass.domain.model.ExampleAccount
+import com.hocok.fortipass.domain.model.ExampleDirectory
 import com.hocok.fortipass.presentation.account.components.AccountInfoWrapper
+import com.hocok.fortipass.presentation.directory.components.DirectoryContainer
 import com.hocok.fortipass.presentation.directory.components.DirectoryText
 import com.hocok.fortipass.presentation.ui.ActionIcon
 import com.hocok.fortipass.presentation.ui.TopBarTitles
@@ -43,11 +54,12 @@ import com.hocok.fortipass.presentation.ui.theme.onSecondColor
 import com.hocok.fortipass.presentation.ui.theme.secondaryTextColor
 import com.hocok.fortipass.presentation.ui.theme.selectedItemColor
 import com.hocok.fortipass.presentation.ui.topRoundedCorner
+import kotlinx.coroutines.launch
 
 
 @Composable
 fun AddEditAccountPage(
-    title: TopBarTitles,
+    title: String,
     password: String,
     onBack: () -> Unit,
     toGenerator: () -> Unit,
@@ -62,12 +74,12 @@ fun AddEditAccountPage(
 
     AddEditAccountPageContent(
         title = title,
-        isFavorite = state.account.isFavorite,
-        accountTitle = state.account.title,
-        login = state.account.login,
-        password = state.account.password,
-        siteLink = state.account.siteLink,
+        account = state.account,
+        directory = state.currentDirectory,
         isPasswordVisible = state.isPasswordVisible,
+        isBottomSheetShow = state.isBottomSheetShow,
+        directoriesList = state.directoriesList,
+        changeBottomSheetShow = {viewModel.onEvent(AddEditAccountEvent.ChangeBottomSheetShow)},
         changeAccountTitle = {viewModel.onEvent(AddEditAccountEvent.ChangeTitle(it))},
         changeLogin = {viewModel.onEvent(AddEditAccountEvent.ChangeLogin(it)) },
         changePassword = {viewModel.onEvent(AddEditAccountEvent.ChangePassword(it))},
@@ -82,19 +94,22 @@ fun AddEditAccountPage(
             )
         ) },
         toGenerator = toGenerator,
+        changeAccountDirectory = {viewModel.onEvent(AddEditAccountEvent.ChangeAccountDirectory(it))},
         modifier = modifier,
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun AddEditAccountPageContent(
-    title: TopBarTitles,
-    isFavorite: Boolean,
-    accountTitle: String,
-    login: String,
-    password: String,
-    siteLink: String,
+    title: String,
+    account: Account,
+    directory: Directory,
     isPasswordVisible: Boolean,
+    isBottomSheetShow: Boolean,
+    directoriesList: List<Directory>,
+    changeAccountDirectory: (Directory) -> Unit,
+    changeBottomSheetShow: () -> Unit,
     changePasswordVisible: () -> Unit,
     changeFavorite: () -> Unit,
     changeAccountTitle: (String) -> Unit,
@@ -108,6 +123,9 @@ private fun AddEditAccountPageContent(
 ){
     val context = LocalContext.current
     val (titleFocus, loginFocus, passwordFocus, linkFocus) = FocusRequester.createRefs()
+
+    val sheetState = rememberModalBottomSheetState()
+    val scope = rememberCoroutineScope()
 
     Scaffold(
         topBar = {
@@ -136,14 +154,14 @@ private fun AddEditAccountPageContent(
                 action = listOf(
                     ActionIcon(iconRes = R.drawable.star,
                         onClick = changeFavorite,
-                        color = if (isFavorite) selectedItemColor
+                        color = if (account.isFavorite) selectedItemColor
                         else onSecondColor)
                 ),
                 modifier = Modifier.clickable { titleFocus.requestFocus() }
                     .padding(bottom = 1.dp).clip(topRoundedCorner)
             ){
                 AddEditTextField(
-                    value = accountTitle,
+                    value = account.title,
                     onValueChange = changeAccountTitle,
                     modifier = Modifier.focusRequester(titleFocus)
                 )
@@ -152,13 +170,13 @@ private fun AddEditAccountPageContent(
             AccountInfoWrapper(
                 title = stringResource(R.string.choose_directory),
                 action = listOf(
-                    ActionIcon(iconRes = R.drawable.expand, onClick = {})
+                    ActionIcon(iconRes = R.drawable.expand,
+                        onClick = {changeBottomSheetShow()})
                 ),
                 modifier = Modifier.clip(bottomRoundedCorner)
             ){
-                /*TODO("Replace with account directory")*/
                 DirectoryText(
-                    text = "Без папки",
+                    text = directory.name,
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
@@ -176,7 +194,7 @@ private fun AddEditAccountPageContent(
                     .padding(bottom = 1.dp).clip(topRoundedCorner)
             ) {
                 AddEditTextField(
-                    value = login,
+                    value = account.login,
                     onValueChange = changeLogin,
                     modifier = Modifier.focusRequester(loginFocus)
                 )
@@ -195,7 +213,7 @@ private fun AddEditAccountPageContent(
                     .clip(bottomRoundedCorner)
             ){
                 AddEditTextField(
-                    value = password,
+                    value = account.password,
                     onValueChange = changePassword,
                     isTextVisible = isPasswordVisible,
                     modifier = Modifier.focusRequester(passwordFocus)
@@ -214,10 +232,40 @@ private fun AddEditAccountPageContent(
                     .clip(fullRoundedCorner)
             ){
                 AddEditTextField(
-                    value = siteLink,
+                    value = account.siteLink,
                     onValueChange = changeSiteLink,
                     modifier = Modifier.focusRequester(linkFocus)
                 )
+            }
+        }
+
+        if (isBottomSheetShow){
+            ModalBottomSheet(
+                onDismissRequest = {
+                    scope.launch {
+                        sheetState.hide()
+                    }.invokeOnCompletion {
+                        changeBottomSheetShow()
+                    }
+                },
+                sheetState = sheetState
+            ) {
+                LazyColumn(
+                    modifier = Modifier.padding(horizontal = 20.dp)
+                        .clip(fullRoundedCorner)
+                ) {
+                    items(directoriesList){
+                        DirectoryContainer(
+                            modifier = Modifier.clickable {
+                                changeAccountDirectory(it)
+                            }.padding(bottom = 1.dp)
+                        ) {
+                            DirectoryText(
+                                text = it.name
+                            )
+                        }
+                    }
+                }
             }
         }
     }
@@ -251,22 +299,23 @@ private fun AddEditTextField(
 private fun AddEditPreview(){
     FortiPassTheme {
         AddEditAccountPageContent(
-            title = TopBarTitles.EDIT,
-            isFavorite = false,
+            title = stringResource( TopBarTitles.EDIT.strId),
+            account = ExampleAccount.singleAccount,
+            directory = ExampleDirectory.singleDirectory,
+            changeAccountDirectory = {},
             isPasswordVisible = true,
-            accountTitle = "GitHub",
-            login = "exampleLogin",
-            password = "qwerty1234",
-            siteLink = "gitHub.com",
             changeAccountTitle = {},
             changeLogin = {},
             changePassword = {},
             changeSiteLink = {},
             changePasswordVisible = {},
-            onSave = {_ ->},
+            onSave = {_ -> },
             onBack = {},
             changeFavorite = {},
-            toGenerator = {}
+            toGenerator = {},
+            isBottomSheetShow = false,
+            directoriesList = emptyList(),
+            changeBottomSheetShow = {}
         )
     }
 }

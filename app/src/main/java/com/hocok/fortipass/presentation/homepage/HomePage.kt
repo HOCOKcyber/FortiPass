@@ -52,6 +52,7 @@ fun HomePage(
     toAddAccount: () -> Unit,
     toDetailsAccount: (id: Int) -> Unit,
     toAddDirectory: () -> Unit,
+    toDetailsDirectory: (id: Int) -> Unit,
     modifier: Modifier = Modifier,
 ){
     val viewModel = hiltViewModel<HomeViewModel>()
@@ -67,6 +68,7 @@ fun HomePage(
         changeDialogDisplay = {viewModel.onEvent(HomeEvent.ChangeDialogDisplay)},
         changeFavoriteDisplay = {viewModel.onEvent(HomeEvent.ChangeFavoriteDisplay)},
         changeSpecificAccountFavorite = {id, isFavorite -> viewModel.onEvent(HomeEvent.ChangeFavoriteById(id, isFavorite))},
+        toDetailsDirectory = toDetailsDirectory,
         toAddAccount = toAddAccount,
         toAddDirectory = toAddDirectory,
         toDetailsAccount = toDetailsAccount,
@@ -87,6 +89,7 @@ private fun HomePageContent(
     changeSpecificAccountFavorite: (id: Int, isFavorite: Boolean) -> Unit,
     toAddAccount: () -> Unit,
     toDetailsAccount: (id: Int) -> Unit,
+    toDetailsDirectory: (id: Int) -> Unit,
     toAddDirectory: () -> Unit,
     modifier: Modifier = Modifier,
 ){
@@ -94,7 +97,7 @@ private fun HomePageContent(
         topBar = {
             TopBarComponent(
                 modifier = Modifier.fillMaxWidth(),
-                title = TopBarTitles.STORAGE,
+                title = stringResource( TopBarTitles.STORAGE.strId),
                 action = listOf(
                     ActionIcon(
                         iconRes = R.drawable.search,
@@ -152,7 +155,7 @@ private fun HomePageContent(
                         DirectoryContainer(
                             modifier = Modifier
                                 .padding(top = 1.dp)
-                                .clickable { /*TODO(Go to directory for searching)*/ }
+                                .clickable { toDetailsDirectory(it.id!!) }
                         ) {
                             DirectoryText(
                                 text = it.name
@@ -285,7 +288,8 @@ private fun HomePagePreview(){
             toDetailsAccount = {},
             toAddAccount = {},
             changeFavoriteDisplay = {},
-            changeDialogDisplay = {}
+            changeDialogDisplay = {},
+            toDetailsDirectory = {}
         )
     }
 }

@@ -17,5 +17,32 @@ abstract class AccountDataBase: RoomDatabase() {
 
     companion object{
         const val NAME = "AccountsDB"
+        /*private var instance: AccountDataBase? = null
+
+        fun getInstance(
+            context: Context,
+            scope: CoroutineScope,
+        ) = instance ?:
+            Room.databaseBuilder(
+                context = context,
+                klass = AccountDataBase::class.java,
+                name = NAME
+            )
+            .addCallback(DirectoryCallBack(scope))
+            .build()*/
     }
+
+    /*private class DirectoryCallBack(
+        private val scope: CoroutineScope
+    ): RoomDatabase.Callback(){
+
+        override fun onCreate(db: SupportSQLiteDatabase) {
+            super.onCreate(db)
+            instance?.let {
+                scope.launch {
+                    it.accountDao.insertDirectory(Directory())
+                }
+            }
+        }
+    }*/
 }

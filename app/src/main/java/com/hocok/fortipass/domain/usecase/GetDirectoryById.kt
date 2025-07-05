@@ -2,14 +2,12 @@ package com.hocok.fortipass.domain.usecase
 
 import com.hocok.fortipass.domain.model.Directory
 import com.hocok.fortipass.domain.repository.AccountRepository
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class GetDirectories @Inject constructor(
+class GetDirectoryById @Inject constructor(
     val repository: AccountRepository
 ) {
-    operator fun invoke(): Flow<List<Directory>> {
-        return repository.getAllDirectory()
+    suspend operator fun invoke(id: Int?): Directory{
+        return repository.getDirectoryById(id)
     }
 }

@@ -28,6 +28,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hocok.fortipass.R
+import com.hocok.fortipass.domain.model.Account
+import com.hocok.fortipass.domain.model.Directory
+import com.hocok.fortipass.domain.model.ExampleAccount
+import com.hocok.fortipass.domain.model.ExampleDirectory
 import com.hocok.fortipass.presentation.account.components.AccountInfoWrapper
 import com.hocok.fortipass.presentation.directory.components.DirectoryText
 import com.hocok.fortipass.presentation.ui.ActionIcon
@@ -61,11 +65,8 @@ fun DetailsAccountPage(
     val state by viewModel.state.collectAsState()
 
     AccountDetailsPageContent(
-        isFavorite = state.account.isFavorite,
-        accountTitle = state.account.title,
-        login = state.account.login,
-        password = state.account.password,
-        siteLink = state.account.siteLink,
+        account = state.account,
+        directory = state.directory,
         isPasswordVisible = state.isPasswordVisible,
         changePasswordVisible = {viewModel.onEvent(DetailsAccountEvent.ChangePasswordVisible)},
         onBack = onBack,
@@ -76,11 +77,8 @@ fun DetailsAccountPage(
 
 @Composable
 private fun AccountDetailsPageContent(
-    isFavorite: Boolean,
-    accountTitle: String,
-    login: String,
-    password: String,
-    siteLink : String,
+    account: Account,
+    directory: Directory,
     isPasswordVisible: Boolean,
     changePasswordVisible: () -> Unit,
     onBack: () -> Unit,
@@ -94,7 +92,7 @@ private fun AccountDetailsPageContent(
     Scaffold(
         topBar = {
             TopBarComponent(
-                title = TopBarTitles.DETAILS,
+                title = stringResource( TopBarTitles.DETAILS.strId),
                 back = ActionIcon(
                     iconRes = R.drawable.close,
                     onClick = onBack
@@ -124,14 +122,14 @@ private fun AccountDetailsPageContent(
                 action = listOf(
                     ActionIcon(iconRes = R.drawable.star,
                         onClick = { /*On Details don't need to do nothing*/ },
-                        color = if (isFavorite) selectedItemColor
+                        color = if (account.isFavorite) selectedItemColor
                         else onSecondColor
                     )
                 ),
                 modifier = Modifier.padding(bottom = 1.dp).clip(topRoundedCorner)
             ){
                 DetailText(
-                    text = accountTitle
+                    text = account.title
                 )
             }
 
@@ -139,14 +137,14 @@ private fun AccountDetailsPageContent(
                 title = stringResource(R.string.choose_directory),
                 action = listOf(
                     ActionIcon(iconRes = R.drawable.expand, onClick = {
-                        /*TODO("To directory")*/
+                        /*On Details don't need to do nothing*/
                     })
                 ),
                 modifier = Modifier.clip(bottomRoundedCorner)
             ){
-                /*TODO("Replace with account directory")*/
                 DirectoryText(
-                    text = "Без папки"
+                    text = directory.name,
+                    style = MaterialTheme.typography.bodyMedium
                 )
             }
 
@@ -163,14 +161,14 @@ private fun AccountDetailsPageContent(
                 action = listOf(ActionIcon(
                     iconRes = R.drawable.copy,
                     onClick = {
-                        clipManager.setClip(copyTextToClip(login))
+                        clipManager.setClip(copyTextToClip(account.login))
                         makeCopyToast(context)
                     })
                 ),
                 modifier = Modifier.padding(bottom = 1.dp).clip(topRoundedCorner)
             ){
                 DetailText(
-                    text = login,
+                    text = account.login,
                 )
             }
             AccountInfoWrapper(
@@ -184,14 +182,14 @@ private fun AccountDetailsPageContent(
                     ActionIcon(
                         iconRes = R.drawable.copy,
                         onClick = {
-                            clipManager.setClip(copyTextToClip(password))
+                            clipManager.setClip(copyTextToClip(account.password))
                             makeCopyToast(context)
                         }),
                 ),
                 modifier = Modifier.clip(bottomRoundedCorner)
             ){
                 DetailText(
-                    text = password,
+                    text = account.password,
                     isTextVisible = isPasswordVisible,
                 )
             }
@@ -210,7 +208,7 @@ private fun AccountDetailsPageContent(
                         iconRes = R.drawable.gotoweb,
                         onClick = {
                             try {
-                                uriHandler.openUri(siteLink)
+                                uriHandler.openUri(account.siteLink)
                             } catch (e: Exception){
                                 e.message?.let { it1 -> Log.e("Error link", it1) }
                                 Toast.makeText(context, context.getString(R.string.wrong_link), Toast.LENGTH_SHORT).show()
@@ -220,7 +218,7 @@ private fun AccountDetailsPageContent(
                 modifier = Modifier.clip(topRoundedCorner).clip(bottomRoundedCorner)
             ){
                 DetailText(
-                    text = siteLink,
+                    text = account.siteLink,
                 )
             }
         }
@@ -252,11 +250,8 @@ private fun DetailText(
 private fun DetailPagePreview(){
     FortiPassTheme {
         AccountDetailsPageContent(
-            isFavorite = false,
-            accountTitle = "GitHub",
-            login = "exampleLogin",
-            password = "qwerty123",
-            siteLink = "github.com",
+            account = ExampleAccount.singleAccount,
+            directory = ExampleDirectory.singleDirectory,
             isPasswordVisible = false,
             changePasswordVisible = {},
             onBack = {},

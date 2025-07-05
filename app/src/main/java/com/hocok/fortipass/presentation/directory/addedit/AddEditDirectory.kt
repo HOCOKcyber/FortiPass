@@ -2,10 +2,8 @@ package com.hocok.fortipass.presentation.directory.addedit
 
 import android.widget.Toast
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -16,6 +14,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -30,7 +29,7 @@ import com.hocok.fortipass.presentation.ui.theme.FortiPassTheme
 
 @Composable
 fun AddEditDirectoryPage(
-    title: TopBarTitles,
+    title: String,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
 ){
@@ -49,7 +48,7 @@ fun AddEditDirectoryPage(
 
 @Composable
 private fun AddEditDirectoryPageContent(
-    title: TopBarTitles,
+    title: String,
     directoryName: String,
     changeDirectoryName: (String) -> Unit,
     onBack: () -> Unit,
@@ -97,7 +96,7 @@ private fun AddEditDirectoryPageContent(
 private fun AddEditDirectoryPagePreview(){
     FortiPassTheme {
         AddEditDirectoryPageContent(
-            title = TopBarTitles.EDIT,
+            title = stringResource( TopBarTitles.EDIT.strId),
             directoryName = "exampleName",
             changeDirectoryName = {},
             onBack = {},

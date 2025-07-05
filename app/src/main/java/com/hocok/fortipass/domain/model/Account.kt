@@ -1,7 +1,6 @@
 package com.hocok.fortipass.domain.model
 
 import androidx.room.Entity
-import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
 @Entity(
@@ -23,15 +22,15 @@ data class Account(
     val password: String = "",
     val siteLink: String = "",
     val isFavorite: Boolean = false,
-    val idDirectory: Int? = null,
+    val idDirectory: Int? = 0,
 )
 
 object ExampleAccount{
-    val singleAccount = Account(id = 0, title = "GitHub", login = "exampleLogin", password = "qwerty1234", siteLink = "github.com", isFavorite = true, idDirectory = null)
+    val singleAccount = Account(id = 0, title = "GitHub", login = "exampleLogin", password = "qwerty1234", siteLink = "github.com", isFavorite = true, idDirectory = 0)
 
     val listOfAccount = listOf(
-        Account(id = 0, title = "GitHub", login = "exampleLogin", password = "qwerty1234", siteLink = "github.com", isFavorite = true, idDirectory = null),
-        Account(id = 1, title = "Yandex", login = "yandexLogin", password = "yandexPassword", siteLink = "yandex.com", isFavorite = false, idDirectory = null),
-        Account(id = 2, title = "Google", login = "googleLogin", password = "googlePassword", siteLink = "google.com", isFavorite = true, idDirectory = null),
+        Account(id = 0, title = "GitHub", login = "exampleLogin", password = "qwerty1234", siteLink = "github.com", isFavorite = true, idDirectory = 0),
+        Account(id = 1, title = "Yandex", login = "yandexLogin", password = "yandexPassword", siteLink = "yandex.com", isFavorite = false, idDirectory = 1),
+        Account(id = 2, title = "Google", login = "googleLogin", password = "googlePassword", siteLink = "google.com", isFavorite = true, idDirectory = 2),
     )
 }

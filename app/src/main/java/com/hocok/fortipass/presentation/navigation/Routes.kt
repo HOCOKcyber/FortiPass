@@ -14,6 +14,8 @@ sealed class Routes {
     @Serializable
     data class DetailsAccount(val id: Int): Routes()
     @Serializable
+    data class DetailsDirectory(val idDirectory: Int): Routes()
+    @Serializable
     data class AddEditAccount(val id: Int?): Routes()
     @Serializable
     data class AddEditDirectory(val id: Int?): Routes()

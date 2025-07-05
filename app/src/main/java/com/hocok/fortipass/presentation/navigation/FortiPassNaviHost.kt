@@ -28,6 +28,7 @@ import androidx.navigation.toRoute
 import com.hocok.fortipass.presentation.account.addedit.AddEditAccountPage
 import com.hocok.fortipass.presentation.account.details.DetailsAccountPage
 import com.hocok.fortipass.presentation.directory.addedit.AddEditDirectoryPage
+import com.hocok.fortipass.presentation.directory.details.DetailsDirectoryPage
 import com.hocok.fortipass.presentation.generator.GeneratorPage
 import com.hocok.fortipass.presentation.homepage.HomePage
 import com.hocok.fortipass.presentation.ui.TopBarTitles
@@ -61,7 +62,8 @@ fun FortiPassNavHost(
                 HomePage(
                     toDetailsAccount = {id -> navController.navigate(Routes.DetailsAccount(id))},
                     toAddAccount = {navController.navigate(Routes.AddEditAccount(null))},
-                    toAddDirectory = {navController.navigate(Routes.AddEditDirectory(null))}
+                    toAddDirectory = {navController.navigate(Routes.AddEditDirectory(null))},
+                    toDetailsDirectory = {id -> navController.navigate(Routes.DetailsDirectory(id))},
                 )
             }
 
@@ -95,8 +97,10 @@ fun FortiPassNavHost(
 
                 val password = it.savedStateHandle.get<String>(PASSWORD_KEY) ?: ""
 
-                val title = if (backEntryId == null) TopBarTitles.ADD
-                            else TopBarTitles.EDIT
+                val title = stringResource(
+                    if (backEntryId == null) TopBarTitles.ADD.strId
+                    else TopBarTitles.EDIT.strId
+                )
 
 
                 AddEditAccountPage(
@@ -117,7 +121,14 @@ fun FortiPassNavHost(
 
             composable<Routes.AddEditDirectory> {
                 AddEditDirectoryPage(
-                    title =  TopBarTitles.ADD,
+                    title =  stringResource( TopBarTitles.ADD.strId),
+                    onBack = {navController.navigateUp()}
+                )
+            }
+
+            composable<Routes.DetailsDirectory> {
+                DetailsDirectoryPage(
+                    toDetailsAccount = {navController.navigate(Routes.DetailsAccount(it))},
                     onBack = {navController.navigateUp()}
                 )
             }

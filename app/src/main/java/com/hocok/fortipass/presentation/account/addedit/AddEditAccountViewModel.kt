@@ -1,11 +1,15 @@
 package com.hocok.fortipass.presentation.account.addedit
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.hocok.fortipass.domain.model.Account
+import com.hocok.fortipass.domain.model.Directory
 import com.hocok.fortipass.domain.usecase.GetAccountById
+import com.hocok.fortipass.domain.usecase.GetDirectories
+import com.hocok.fortipass.domain.usecase.GetDirectoryById
 import com.hocok.fortipass.domain.usecase.SaveAccount
 import com.hocok.fortipass.domain.usecase.Valid
 import com.hocok.fortipass.domain.usecase.ValidAccountData
@@ -14,6 +18,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,7 +27,9 @@ import javax.inject.Inject
 class AddEditAccountViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     val saveAccount: SaveAccount,
-    val getAccountById: GetAccountById
+    val getAccountById: GetAccountById,
+    getDirectories: GetDirectories,
+    val getDirectoryById: GetDirectoryById,
 ): ViewModel() {
 
     private var _state = MutableStateFlow(AddEditState())
@@ -59,28 +67,60 @@ class AddEditAccountViewModel @Inject constructor(
 
                 event.toastCallBack(validationState.message)
             }
+            is AddEditAccountEvent.ChangeBottomSheetShow -> {
+                _state.value = _state.value.copy(isBottomSheetShow = !_state.value.isBottomSheetShow)
+            }
+            is AddEditAccountEvent.ChangeAccountDirectory -> {
+                _state.value = _state.value.copy(
+                    isBottomSheetShow = false,
+                    currentDirectory = event.newDirectory,
+                    account = _state.value.account.copy(
+                        idDirectory = event.newDirectory.id
+                    )
+                )
+            }
         }
     }
 
     init {
         val id = savedStateHandle.toRoute<Routes.AddEditAccount>().id
 
-        if (id == null) _state.value = _state.value.copy(account = Account())
-        else viewModelScope.launch {
-            val account = getAccountById(id).first()
-            _state.value = _state.value.copy(account = account)
+        viewModelScope.launch {
+            if (id != null){
+                    val account = getAccountById(id).first()
+                    val directory = getDirectoryById(account.idDirectory!!)
+                    _state.value = _state.value.copy(
+                        account = account,
+                        currentDirectory = directory
+                    )
+            } else {
+                _state.value = _state.value.copy(
+                    currentDirectory = getDirectoryById(0)
+                )
+            }
         }
+
+        getDirectories().onEach {
+            Log.d("getDirectory:", it.toString() )
+            _state.value = _state.value.copy(directoriesList = it)
+        }.launchIn(viewModelScope)
+
     }
 }
 
 data class AddEditState(
     val account: Account = Account(),
+    val directoriesList: List<Directory> = emptyList(),
+    val currentDirectory: Directory = Directory(),
     val isPasswordVisible: Boolean = false,
+    val isBottomSheetShow: Boolean = false,
 )
 
 sealed class AddEditAccountEvent{
     data object ChangeFavorite: AddEditAccountEvent()
     data object ChangePasswordVisible: AddEditAccountEvent()
+    data object ChangeBottomSheetShow: AddEditAccountEvent()
+    data class ChangeAccountDirectory(val newDirectory: Directory): AddEditAccountEvent()
     data class ChangeTitle(val newTitle: String): AddEditAccountEvent()
     data class ChangeLogin(val newLogin: String): AddEditAccountEvent()
     data class ChangePassword(val newPassword: String): AddEditAccountEvent()

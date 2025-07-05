@@ -5,7 +5,6 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Update
 import com.hocok.fortipass.domain.model.Account
 import com.hocok.fortipass.domain.model.Directory
 import kotlinx.coroutines.flow.Flow
@@ -24,6 +23,12 @@ interface AccountDao {
 
     @Query("SELECT * FROM accounts WHERE id = :id")
     fun getAccountById(id: Int): Flow<Account>
+
+    @Query("SELECT * FROM directories WHERE id = :id")
+    suspend fun getDirectoryById(id: Int?): Directory
+
+    @Query("SELECT * FROM accounts WHERE idDirectory = :idDirectory")
+    suspend fun getAccountsByDirectoryId(idDirectory: Int): List<Account>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAccount(account: Account)

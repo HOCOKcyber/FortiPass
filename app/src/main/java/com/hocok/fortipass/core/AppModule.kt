@@ -9,7 +9,9 @@ import com.hocok.fortipass.domain.usecase.ChangeFavoriteById
 import com.hocok.fortipass.domain.usecase.CreatePassword
 import com.hocok.fortipass.domain.usecase.GetAccountById
 import com.hocok.fortipass.domain.usecase.GetAccounts
+import com.hocok.fortipass.domain.usecase.GetAccountsByDirectoryId
 import com.hocok.fortipass.domain.usecase.GetDirectories
+import com.hocok.fortipass.domain.usecase.GetDirectoryById
 import com.hocok.fortipass.domain.usecase.SaveAccount
 import com.hocok.fortipass.domain.usecase.SaveDirectory
 import dagger.Module
@@ -85,5 +87,17 @@ object AppModule {
     @Singleton
     fun provideUseCaseCreatePassword(): CreatePassword{
         return CreatePassword()
+    }
+
+    @Provides
+    @Singleton
+    fun provideUseCaseGetDirectoryById(repositoryImp: AccountRepositoryImp): GetDirectoryById{
+        return GetDirectoryById(repositoryImp)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUseCaseGetAccountsByDirectoryId(repositoryImp: AccountRepositoryImp): GetAccountsByDirectoryId{
+        return GetAccountsByDirectoryId(repositoryImp)
     }
 }

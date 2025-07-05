@@ -27,6 +27,14 @@ class AccountRepositoryImp @Inject constructor(
         return dao.getAccountById(id)
     }
 
+    override suspend fun getDirectoryById(id: Int?): Directory {
+        return dao.getDirectoryById(id)
+    }
+
+    override suspend fun getAccountsByDirectoryId(idDirectory: Int): List<Account> {
+        return dao.getAccountsByDirectoryId(idDirectory)
+    }
+
     override suspend fun insertAccount(account: Account) {
         dao.insertAccount(account)
     }

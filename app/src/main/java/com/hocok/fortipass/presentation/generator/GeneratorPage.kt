@@ -132,7 +132,7 @@ private fun GeneratorPageContent(
         topBar = {
             TopBarComponent(
                 modifier = Modifier.fillMaxWidth(),
-                title = TopBarTitles.GENERATOR,
+                title = stringResource( TopBarTitles.GENERATOR.strId),
                 back = ActionIcon(
                     iconRes = R.drawable.close,
                     onClick = onBack,

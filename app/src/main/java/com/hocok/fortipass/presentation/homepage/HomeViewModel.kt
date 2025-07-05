@@ -1,6 +1,7 @@
 package com.hocok.fortipass.presentation.homepage
 
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hocok.fortipass.domain.model.Account
@@ -8,6 +9,7 @@ import com.hocok.fortipass.domain.model.Directory
 import com.hocok.fortipass.domain.usecase.ChangeFavoriteById
 import com.hocok.fortipass.domain.usecase.GetAccounts
 import com.hocok.fortipass.domain.usecase.GetDirectories
+import com.hocok.fortipass.domain.usecase.SaveDirectory
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,6 +24,7 @@ class HomeViewModel @Inject constructor(
     private val getAccountUseCase: GetAccounts,
     private val changeFavoriteById: ChangeFavoriteById,
     private val getDirectoriesUseCase: GetDirectories,
+    private val saveDirectory: SaveDirectory,
 ): ViewModel() {
 
     private var getAccountJob: Job? = null
@@ -32,6 +35,11 @@ class HomeViewModel @Inject constructor(
     init {
         getAccount(false)
         getDirectories()
+
+        /*Make sure that directory with id=0 name = "Без назваия" exist*/
+        viewModelScope.launch {
+            saveDirectory(Directory(id = 0, name = "Без названия"))
+        }
     }
 
     fun onEvent(event: HomeEvent){
@@ -68,6 +76,7 @@ class HomeViewModel @Inject constructor(
 
     private fun getDirectories(){
         getDirectoriesUseCase().onEach {
+            Log.d("direct", it.toString())
             _state.value = _state.value.copy(directoryList = it)
         }.launchIn(viewModelScope)
     }

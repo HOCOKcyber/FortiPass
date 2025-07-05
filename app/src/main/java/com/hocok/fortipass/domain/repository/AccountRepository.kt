@@ -12,7 +12,11 @@ interface AccountRepository {
 
     fun getFavoriteAccount(): Flow<List<Account>>
 
+
     fun getAccountById(id: Int): Flow<Account>
+    suspend fun getDirectoryById(id: Int?): Directory
+
+    suspend fun getAccountsByDirectoryId(idDirectory: Int): List<Account>
 
     suspend fun insertAccount(account: Account)
     suspend fun saveDirectory(directory: Directory)
