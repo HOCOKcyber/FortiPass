@@ -1,5 +1,6 @@
 package com.hocok.fortipass.presentation
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -23,6 +24,7 @@ import com.hocok.fortipass.presentation.navigation.FortiPassNavHost
 import com.hocok.fortipass.presentation.ui.theme.FortiPassTheme
 import com.hocok.fortipass.presentation.ui.theme.secondColor
 import com.hocok.fortipass.presentation.ui.theme.thirdColor
+import com.hocok.fortipass.search.SearchActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -39,6 +41,7 @@ class MainActivity : ComponentActivity() {
                 StatusBarProtection()
             }
         }
+
     }
 }
 
