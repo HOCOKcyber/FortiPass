@@ -4,15 +4,13 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import com.hocok.fortipass.domain.usecase.CreatePassword
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import javax.inject.Inject
 
-@HiltViewModel
-class GeneratorViewModel @Inject constructor(
-    val createPasswordUseCase: CreatePassword
-): ViewModel() {
+class GeneratorViewModel: ViewModel() {
+    private val createPasswordUseCase: CreatePassword = CreatePassword()
+
+
     private val _state = MutableStateFlow(GeneratorState())
     val state = _state.asStateFlow()
 
