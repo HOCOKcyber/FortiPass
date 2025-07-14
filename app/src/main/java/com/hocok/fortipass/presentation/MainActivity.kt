@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import com.hocok.fortipass.presentation.navigation.FortiPassNavHost
@@ -33,6 +34,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        window.navigationBarColor = secondColor.toArgb()
         setContent {
             FortiPassTheme {
                 FortiPassNavHost(
@@ -42,6 +44,12 @@ class MainActivity : ComponentActivity() {
             }
         }
 
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        val intent = Intent(this, AuthActivity::class.java)
+        startActivity(intent)
     }
 }
 

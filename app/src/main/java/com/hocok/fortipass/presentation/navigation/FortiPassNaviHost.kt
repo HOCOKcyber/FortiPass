@@ -1,8 +1,10 @@
 package com.hocok.fortipass.presentation.navigation
 
+import android.content.Intent
 import android.util.Log
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
@@ -12,11 +14,22 @@ import androidx.compose.material.Text
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.compose.LifecycleEventEffect
+import androidx.lifecycle.compose.LifecycleStartEffect
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -25,8 +38,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.hocok.fortipass.presentation.AuthActivity
 import com.hocok.fortipass.presentation.account.addedit.AddEditAccountPage
 import com.hocok.fortipass.presentation.account.details.DetailsAccountPage
+import com.hocok.fortipass.presentation.authentication.login.LoginPage
 import com.hocok.fortipass.presentation.directory.addedit.AddEditDirectoryPage
 import com.hocok.fortipass.presentation.directory.details.DetailsDirectoryPage
 import com.hocok.fortipass.presentation.generator.GeneratorPage
@@ -158,6 +173,9 @@ private fun BottomNavigationBar(
                 it.hasRoute(bottomRoute.route::class)
             } == true
 
+            val offset = if (isSelected) Offset(0f, -3f)
+            else Offset(0f, 3f)
+
             BottomNavigationItem(
                 selected = isSelected,
                 onClick = { if (!isSelected) navController.navigate(bottomRoute.route) },
@@ -169,6 +187,7 @@ private fun BottomNavigationBar(
                         modifier = Modifier.size(30.dp)
                     )
                        },
+                modifier = Modifier.offset(offset.x.dp, offset.y.dp)
             )
         }
     }
