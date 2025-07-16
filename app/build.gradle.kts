@@ -103,4 +103,7 @@ dependencies {
 
     // DataStore
     implementation("androidx.datastore:datastore-preferences:1.1.7")
+
+    // Argon2
+    implementation("com.lambdapioneer.argon2kt:argon2kt:1.6.0")
 }

@@ -2,8 +2,6 @@ package com.hocok.fortipass.domain.usecase
 
 import androidx.annotation.StringRes
 import com.hocok.fortipass.R
-import com.hocok.fortipass.presentation.authentication.registration.RegistrationEvent
-import kotlinx.serialization.descriptors.PrimitiveKind
 
 class RegistrationPasswordValidation {
 

@@ -2,6 +2,7 @@ package com.hocok.fortipass.domain.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.hocok.fortipass.domain.util.cipher.CipherManager
 
 @Entity(
     tableName = "accounts",
@@ -21,9 +22,19 @@ data class Account(
     val login: String = "",
     val password: String = "",
     val siteLink: String = "",
+    val iv: String = "",
     val isFavorite: Boolean = false,
     val idDirectory: Int? = 0,
 )
+
+fun Account.getDecodeAccount(): Account{
+    return copy(password = CipherManager.decrypt(password, iv))
+}
+
+fun Account.getEncodeAccount(): Account{
+    val (encryptPassword, iv) = CipherManager.encrypt(password)
+    return copy(password = encryptPassword, iv = iv)
+}
 
 object ExampleAccount{
     val singleAccount = Account(id = 0, title = "GitHub", login = "exampleLogin", password = "qwerty1234", siteLink = "github.com", isFavorite = true, idDirectory = 0)

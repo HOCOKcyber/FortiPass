@@ -7,6 +7,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.hocok.fortipass.domain.model.Account
 import com.hocok.fortipass.domain.model.Directory
+import com.hocok.fortipass.domain.model.getDecodeAccount
+import com.hocok.fortipass.domain.model.getEncodeAccount
 import com.hocok.fortipass.domain.usecase.GetAccountById
 import com.hocok.fortipass.domain.usecase.GetDirectories
 import com.hocok.fortipass.domain.usecase.GetDirectoryById
@@ -60,7 +62,7 @@ class AddEditAccountViewModel @Inject constructor(
 
                 if (validationState is Valid.Success) {
                     viewModelScope.launch {
-                        saveAccount(account = _state.value.account)
+                        saveAccount(account = _state.value.account.getEncodeAccount())
                         event.onBack()
                     }
                 }
@@ -87,7 +89,7 @@ class AddEditAccountViewModel @Inject constructor(
 
         viewModelScope.launch {
             if (id != null){
-                    val account = getAccountById(id).first()
+                    val account = getAccountById(id).first().getDecodeAccount()
                     val directory = getDirectoryById(account.idDirectory!!)
                     _state.value = _state.value.copy(
                         account = account,
@@ -104,7 +106,6 @@ class AddEditAccountViewModel @Inject constructor(
             Log.d("getDirectory:", it.toString() )
             _state.value = _state.value.copy(directoriesList = it)
         }.launchIn(viewModelScope)
-
     }
 }
 

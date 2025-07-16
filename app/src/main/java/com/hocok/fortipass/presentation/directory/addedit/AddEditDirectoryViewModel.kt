@@ -1,6 +1,5 @@
 package com.hocok.fortipass.presentation.directory.addedit
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hocok.fortipass.domain.model.Directory
@@ -13,7 +12,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddEditDirectoryViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
     val saveDirectoryUseCase: SaveDirectory
 ): ViewModel() {
 

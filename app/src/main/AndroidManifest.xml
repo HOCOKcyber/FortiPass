@@ -33,32 +33,6 @@
 
         </activity>
 
-        <service
-            android:name=".service.FortiPassAutoFill"
-            android:exported="true"
-            android:permission="android.permission.BIND_AUTOFILL_SERVICE"
-            >
-            <intent-filter>
-                <action android:name="android.service.autofill.AutofillService" />
-            </intent-filter>
-            <meta-data
-                android:name="android.autofill"
-                android:resource="@xml/autofill_service" />
-        </service>
-
-        <activity
-            android:name=".search.SearchActivity"
-            android:exported="true"
-            android:launchMode="singleTop"
-            android:excludeFromRecents="true"
-            android:taskAffinity=""
-            android:theme="@style/Theme.AppCompat.Light">
-            <intent-filter>
-                <action android:name="android.service.autofill.action.AUTHENTICATION" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-
     </application>
 
 </manifest>

@@ -1,8 +1,6 @@
 package com.hocok.fortipass.domain.usecase
 
-import androidx.lifecycle.viewModelScope
 import com.hocok.fortipass.domain.model.Account
-import kotlinx.coroutines.launch
 
 /*
 * TODO("Решить  вопрос с литераломи")

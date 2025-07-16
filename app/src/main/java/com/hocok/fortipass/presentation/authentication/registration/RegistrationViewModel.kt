@@ -2,17 +2,14 @@ package com.hocok.fortipass.presentation.authentication.registration
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hocok.fortipass.domain.util.cipher.CipherManager
 import com.hocok.fortipass.domain.repository.DataStoreRepository
 import com.hocok.fortipass.domain.usecase.PasswordValidation
 import com.hocok.fortipass.domain.usecase.RegistrationPasswordValidation
-import com.hocok.fortipass.presentation.authentication.login.LoginEvent
-import com.hocok.fortipass.presentation.authentication.login.LoginState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -50,10 +47,17 @@ class RegistrationViewModel @Inject constructor(
 
                 viewModelScope.launch {
                     if (validationResult.isSuccess){
-                        dataStoreRep.savePassword(_state.value.password)
-                    }
+                        val salt = ByteArray(16) { (-127..127).random().toByte() }
+                        CipherManager.createHelper(_state.value.password.toByteArray(), salt)
+                        val hashPassword = CipherManager.passwordToHash(_state.value.password)
 
-                    validationEvent.send(validationResult)
+                        dataStoreRep.saveSalt(salt)
+                        dataStoreRep.saveHashPassword(hashPassword)
+
+                        validationEvent.send(validationResult)
+                    } else {
+                        validationEvent.send(validationResult)
+                    }
                 }
             }
         }

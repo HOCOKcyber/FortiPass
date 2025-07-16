@@ -3,7 +3,6 @@ package com.hocok.fortipass.domain.usecase
 import com.hocok.fortipass.domain.model.Directory
 import com.hocok.fortipass.domain.repository.AccountRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class GetDirectories @Inject constructor(

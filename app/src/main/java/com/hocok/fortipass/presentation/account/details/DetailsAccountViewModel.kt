@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.hocok.fortipass.domain.model.Account
 import com.hocok.fortipass.domain.model.Directory
+import com.hocok.fortipass.domain.model.getDecodeAccount
 import com.hocok.fortipass.domain.usecase.ChangeFavoriteById
 import com.hocok.fortipass.domain.usecase.GetAccountById
 import com.hocok.fortipass.domain.usecase.GetDirectoryById
@@ -51,7 +52,7 @@ class DetailsAccountViewModel @Inject constructor(
             .onEach {
                 val directory = getDirectoryById(it.idDirectory)
                 _state.value = _state.value.copy(
-                    account = it,
+                    account = it.getDecodeAccount(),
                     directory = directory
                 )
             }.launchIn(viewModelScope)

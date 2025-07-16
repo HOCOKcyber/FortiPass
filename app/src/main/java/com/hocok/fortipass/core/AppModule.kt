@@ -1,9 +1,6 @@
 package com.hocok.fortipass.core
 
 import android.app.Application
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.preferencesDataStore
 import androidx.room.Room
 import com.hocok.fortipass.data.data_source.AccountDao
 import com.hocok.fortipass.data.data_source.AccountDataBase
@@ -11,7 +8,6 @@ import com.hocok.fortipass.data.repository.AccountRepositoryImp
 import com.hocok.fortipass.data.repository.DataStoreRepositoryImp
 import com.hocok.fortipass.domain.repository.DataStoreRepository
 import com.hocok.fortipass.domain.usecase.ChangeFavoriteById
-import com.hocok.fortipass.domain.usecase.CreatePassword
 import com.hocok.fortipass.domain.usecase.GetAccountById
 import com.hocok.fortipass.domain.usecase.GetAccounts
 import com.hocok.fortipass.domain.usecase.GetAccountsByDirectoryId

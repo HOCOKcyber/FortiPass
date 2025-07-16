@@ -1,15 +1,13 @@
 package com.hocok.fortipass.presentation.authentication.login
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hocok.fortipass.domain.util.cipher.CipherManager
 import com.hocok.fortipass.domain.repository.DataStoreRepository
-import com.hocok.fortipass.domain.usecase.PasswordValidation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -26,7 +24,8 @@ class LoginViewModel @Inject constructor(
     private val validationEvent = Channel<Boolean>()
     val validationReceiver = validationEvent.receiveAsFlow()
 
-    private var userPassword: String? = null
+    private var userHashPassword: Int? = null
+    private lateinit var salt: ByteArray
 
     fun onEvent(event: LoginEvent){
 
@@ -39,8 +38,13 @@ class LoginViewModel @Inject constructor(
             }
             is LoginEvent.OnContinue -> {
                 viewModelScope.launch {
-                    Log.d("Login Activity Valid", "${_state.value.password} - $userPassword")
-                    validationEvent.send(userPassword == _state.value.password)
+                    val isValid = CipherManager.checkPassword(_state.value.password, userHashPassword!!)
+                    if (isValid){
+                        CipherManager.createHelper(_state.value.password.toByteArray(), salt)
+                        val data = CipherManager.encrypt("Hello world")
+                        CipherManager.decrypt(data.first, data.second)
+                    }
+                    validationEvent.send(isValid)
                 }
             }
         }
@@ -48,7 +52,8 @@ class LoginViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            userPassword = dataStoreRep.password.first()
+            userHashPassword = dataStoreRep.hashPassword.first()
+            salt = dataStoreRep.salt.first()
         }
     }
 }
