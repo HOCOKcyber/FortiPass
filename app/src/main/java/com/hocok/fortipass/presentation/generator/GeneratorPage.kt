@@ -42,7 +42,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hocok.fortipass.R
-import com.hocok.fortipass.presentation.ui.ActionIcon
+import com.hocok.fortipass.presentation.ui.ActionButton
 import com.hocok.fortipass.presentation.ui.TopBarTitles
 import com.hocok.fortipass.presentation.ui.bottomRoundedCorner
 import com.hocok.fortipass.presentation.ui.components.CustomSwitchButton
@@ -133,15 +133,15 @@ private fun GeneratorPageContent(
             TopBarComponent(
                 modifier = Modifier.fillMaxWidth(),
                 title = stringResource( TopBarTitles.GENERATOR.strId),
-                back = ActionIcon(
+                back = ActionButton.ActionIcon(
                     iconRes = R.drawable.close,
                     onClick = onBack,
                 ),
                 action =
-                    if (isFromAddEdit) listOf(ActionIcon(
+                    if (isFromAddEdit) listOf(ActionButton.ActionIcon(
                         iconRes = R.drawable.done,
                         onClick = {savePasswordFromGenerator(password.text)}
-                    )) else emptyList<ActionIcon>()
+                    )) else emptyList<ActionButton.ActionIcon>()
 
             )
         },
@@ -159,7 +159,7 @@ private fun GeneratorPageContent(
            GeneratorPasswordField(
                password = password,
                onPasswordChange = passwordChange,
-               refreshPassword = ActionIcon(
+               refreshPassword = ActionButton.ActionIcon(
                    iconRes = R.drawable.lock,
                    onClick = refreshPassword
                ),
@@ -281,7 +281,7 @@ private fun GeneratorPasswordField(
     password: TextFieldValue,
     onPasswordChange: (TextFieldValue) -> Unit,
     modifier: Modifier = Modifier,
-    refreshPassword: ActionIcon? = null,
+    refreshPassword: ActionButton.ActionIcon? = null,
 ){
     val textFieldFocus = FocusRequester()
     Row(

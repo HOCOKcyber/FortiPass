@@ -21,7 +21,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.hocok.fortipass.R
 import com.hocok.fortipass.presentation.directory.components.DirectoryContainer
 import com.hocok.fortipass.presentation.directory.components.DirectoryTextField
-import com.hocok.fortipass.presentation.ui.ActionIcon
+import com.hocok.fortipass.presentation.ui.ActionButton
 import com.hocok.fortipass.presentation.ui.TopBarTitles
 import com.hocok.fortipass.presentation.ui.components.TopBarComponent
 import com.hocok.fortipass.presentation.ui.fullRoundedCorner
@@ -65,11 +65,12 @@ private fun AddEditDirectoryPageContent(
                 modifier = Modifier.fillMaxWidth(),
                 title = title,
                 action = listOf(
-                    ActionIcon(iconRes = R.drawable.done, onClick = {
-                        onSave{ Toast.makeText(context, it, Toast.LENGTH_LONG).show() }
-                    })
+                    ActionButton.ActionText(
+                        textRes = R.string.save,
+                        onClick = { onSave{ Toast.makeText(context, it, Toast.LENGTH_LONG).show() } }
+                    )
                 ),
-                back = ActionIcon(iconRes = R.drawable.close, onClick = onBack)
+                back = ActionButton.ActionIcon(iconRes = R.drawable.close, onClick = onBack)
             )
         },
 

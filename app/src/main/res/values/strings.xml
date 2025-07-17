@@ -40,4 +40,17 @@
     <string name="password_error_lenght">Пароль должен быть более 8 символов</string>
     <string name="password_errro_diffrence">Пароли должны совпадать</string>
     <string name="repeat_password">Повторите пароль</string>
+    <string name="export_data">Экспортировать данные</string>
+    <string name="export">Экспортировать</string>
+    <string name="go_to_file">Перейти к файлу</string>
+    <string name="choose_type_export_data">Тип данных</string>
+    <string name="cipher_type_export_data">Зашифрованные</string>
+    <string name="open_type_export_data">Без шифрования</string>
+    <string name="save">Сохранить</string>
+    <string name="export_data_notify_title">Экспортирование данных</string>
+    <string name="export_data_success">Успешно</string>
+    <string name="export_data_fail">Ошибка</string>
+    <string name="error_wrong_path">Не удалось получить доступ к заданному пути</string>
+    <string name="not_found_app_json">Ваше устройство не поддерживаем json</string>
+    <string name="file_delete_or_change">Файл удалён, перемещён или изменён</string>
 </resources>

@@ -44,7 +44,7 @@ import com.hocok.fortipass.domain.model.ExampleDirectory
 import com.hocok.fortipass.presentation.account.components.AccountInfoWrapper
 import com.hocok.fortipass.presentation.directory.components.DirectoryContainer
 import com.hocok.fortipass.presentation.directory.components.DirectoryText
-import com.hocok.fortipass.presentation.ui.ActionIcon
+import com.hocok.fortipass.presentation.ui.ActionButton
 import com.hocok.fortipass.presentation.ui.TopBarTitles
 import com.hocok.fortipass.presentation.ui.bottomRoundedCorner
 import com.hocok.fortipass.presentation.ui.components.TopBarComponent
@@ -133,10 +133,12 @@ private fun AddEditAccountPageContent(
                 modifier = Modifier.fillMaxWidth(),
                 title = title,
                 action = listOf(
-                    ActionIcon(iconRes = R.drawable.done, onClick = {
-                                onSave {Toast.makeText(context, it, Toast.LENGTH_LONG).show() } })
+                    ActionButton.ActionText(
+                        textRes = R.string.save,
+                        onClick = { onSave { Toast.makeText(context, it, Toast.LENGTH_LONG).show() } }
+                    )
                 ),
-                back = ActionIcon(iconRes = R.drawable.close, onClick = onBack)
+                back = ActionButton.ActionIcon(iconRes = R.drawable.close, onClick = onBack)
             )
         },
 
@@ -152,10 +154,12 @@ private fun AddEditAccountPageContent(
             AccountInfoWrapper(
                 title = stringResource(R.string.title_account),
                 action = listOf(
-                    ActionIcon(iconRes = R.drawable.star,
+                    ActionButton.ActionIcon(
+                        iconRes = R.drawable.star,
                         onClick = changeFavorite,
                         color = if (account.isFavorite) selectedItemColor
-                        else onSecondColor)
+                        else onSecondColor
+                    )
                 ),
                 modifier = Modifier.clickable { titleFocus.requestFocus() }
                     .padding(bottom = 1.dp).clip(topRoundedCorner)
@@ -170,8 +174,8 @@ private fun AddEditAccountPageContent(
             AccountInfoWrapper(
                 title = stringResource(R.string.choose_directory),
                 action = listOf(
-                    ActionIcon(iconRes = R.drawable.expand,
-                        onClick = {changeBottomSheetShow()})
+                    ActionButton.ActionIcon(iconRes = R.drawable.expand,
+                        onClick = { changeBottomSheetShow() })
                 ),
                 modifier = Modifier.clip(bottomRoundedCorner)
             ){
@@ -202,12 +206,12 @@ private fun AddEditAccountPageContent(
             AccountInfoWrapper(
                 title = stringResource(R.string.password),
                 action = listOf(
-                    ActionIcon(
-                        iconRes =   if (isPasswordVisible) R.drawable.visibility
+                    ActionButton.ActionIcon(
+                        iconRes = if (isPasswordVisible) R.drawable.visibility
                         else R.drawable.visibility_off,
                         onClick = changePasswordVisible
                     ),
-                    ActionIcon(iconRes = R.drawable.lock, onClick = toGenerator)
+                    ActionButton.ActionIcon(iconRes = R.drawable.lock, onClick = toGenerator)
                 ),
                 modifier = Modifier.clickable { passwordFocus.requestFocus() }
                     .clip(bottomRoundedCorner)

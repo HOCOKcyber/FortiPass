@@ -23,7 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hocok.fortipass.R
 import com.hocok.fortipass.domain.model.Account
-import com.hocok.fortipass.presentation.ui.ActionIcon
+import com.hocok.fortipass.presentation.ui.ActionButton
 import com.hocok.fortipass.presentation.ui.theme.FortiPassTheme
 import com.hocok.fortipass.presentation.ui.theme.mainTextColor
 import com.hocok.fortipass.presentation.ui.theme.onSecondColor
@@ -58,7 +58,7 @@ fun AccountPresentation(
             )
             Spacer(Modifier.weight(1f))
             AccountActionIcon(
-                actionIcon = ActionIcon(
+                actionIcon = ActionButton.ActionIcon(
                     onClick = onFavoriteClick,
                     iconRes = R.drawable.star,
                 ),
@@ -66,7 +66,7 @@ fun AccountPresentation(
                 modifier = Modifier.padding(end = 10.dp)
             )
             AccountActionIcon(
-                actionIcon = ActionIcon(
+                actionIcon = ActionButton.ActionIcon(
                     onClick = {
                         /*TODO("сделать меню")*/
                     },
@@ -119,7 +119,7 @@ private fun AccountShortInfo(
 
 @Composable
 fun AccountActionIcon(
-    actionIcon: ActionIcon,
+    actionIcon: ActionButton.ActionIcon,
     modifier: Modifier = Modifier,
     isFavorite: Boolean = false
 ){

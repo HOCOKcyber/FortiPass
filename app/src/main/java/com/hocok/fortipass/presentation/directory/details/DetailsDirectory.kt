@@ -20,7 +20,7 @@ import com.hocok.fortipass.domain.model.Directory
 import com.hocok.fortipass.domain.model.ExampleAccount
 import com.hocok.fortipass.domain.model.ExampleDirectory
 import com.hocok.fortipass.presentation.account.components.AccountPresentation
-import com.hocok.fortipass.presentation.ui.ActionIcon
+import com.hocok.fortipass.presentation.ui.ActionButton
 import com.hocok.fortipass.presentation.ui.components.TopBarComponent
 import com.hocok.fortipass.presentation.ui.fullRoundedCorner
 import com.hocok.fortipass.presentation.ui.theme.FortiPassTheme
@@ -56,7 +56,7 @@ fun DetailsDirectoryPageContent(
             TopBarComponent(
                 modifier = Modifier.fillMaxWidth(),
                 title = directory.name,
-                back = ActionIcon(
+                back = ActionButton.ActionIcon(
                         iconRes = R.drawable.close,
                         onClick = onBack
                 )

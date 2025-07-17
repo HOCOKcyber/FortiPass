@@ -18,14 +18,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.hocok.fortipass.presentation.ui.ActionIcon
+import com.hocok.fortipass.presentation.ui.ActionButton
 import com.hocok.fortipass.presentation.ui.theme.secondColor
 
 @Composable
 fun AccountInfoWrapper(
     title: String,
     modifier: Modifier = Modifier,
-    action: List<ActionIcon> = emptyList(),
+    action: List<ActionButton.ActionIcon> = emptyList(),
     content: @Composable () -> Unit,
 ){
     Box(

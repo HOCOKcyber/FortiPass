@@ -39,10 +39,11 @@ import com.hocok.fortipass.domain.model.ExampleDirectory
 import com.hocok.fortipass.presentation.account.components.AccountPresentation
 import com.hocok.fortipass.presentation.directory.components.DirectoryContainer
 import com.hocok.fortipass.presentation.directory.components.DirectoryText
-import com.hocok.fortipass.presentation.ui.ActionIcon
+import com.hocok.fortipass.presentation.ui.ActionButton
 import com.hocok.fortipass.presentation.ui.TopBarTitles
 import com.hocok.fortipass.presentation.ui.components.CustomSwitchButton
 import com.hocok.fortipass.presentation.ui.components.DecoratorFloatingButton
+import com.hocok.fortipass.presentation.ui.components.FortiPassDialog
 import com.hocok.fortipass.presentation.ui.components.TopBarComponent
 import com.hocok.fortipass.presentation.ui.theme.FortiPassTheme
 import com.hocok.fortipass.presentation.ui.theme.selectedItemColor
@@ -99,12 +100,12 @@ private fun HomePageContent(
                 modifier = Modifier.fillMaxWidth(),
                 title = stringResource( TopBarTitles.STORAGE.strId),
                 action = listOf(
-                    ActionIcon(
+                    ActionButton.ActionIcon(
                         iconRes = R.drawable.search,
-                        onClick = {/*TODO("realise search")*/}
+                        onClick = {/*TODO("realise search")*/ }
                     ),
-                    ActionIcon(
-                        iconRes =   if (isAccountsDisplay) R.drawable.folder
+                    ActionButton.ActionIcon(
+                        iconRes = if (isAccountsDisplay) R.drawable.folder
                         else R.drawable.account,
                         onClick = changeListDisplay
                     )
@@ -113,7 +114,7 @@ private fun HomePageContent(
         },
         floatingActionButton = {
             DecoratorFloatingButton(
-                actionIcon = ActionIcon(
+                actionIcon = ActionButton.ActionIcon(
                     iconRes = R.drawable.add,
                     onClick = changeDialogDisplay
                 )
@@ -165,10 +166,25 @@ private fun HomePageContent(
                 }
             }
             if (isDialogDisplay){
-                DialogSelectTypeToAdd(
+                FortiPassDialog(
                     onDismissRequest = changeDialogDisplay,
-                    toAddLogin = toAddAccount,
-                    toAddDirectory = toAddDirectory,
+                    title = stringResource( R.string.type),
+                    actionList = listOf(
+                        ActionButton.ActionText(
+                            textRes = R.string.login,
+                            onClick = {
+                                toAddAccount()
+                                changeDialogDisplay()
+                            }
+                        ),
+                        ActionButton.ActionText(
+                            textRes = R.string.directory,
+                            onClick = {
+                                toAddDirectory()
+                                changeDialogDisplay()
+                            }
+                        ),
+                    )
                 )
             }
         }

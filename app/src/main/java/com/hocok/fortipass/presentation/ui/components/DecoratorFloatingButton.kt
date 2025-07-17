@@ -11,12 +11,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.hocok.fortipass.presentation.ui.ActionIcon
+import com.hocok.fortipass.presentation.ui.ActionButton
 import com.hocok.fortipass.presentation.ui.theme.actionColor
 
 @Composable
 fun DecoratorFloatingButton(
-    actionIcon: ActionIcon,
+    actionIcon: ActionButton.ActionIcon,
     modifier: Modifier = Modifier
 ){
     IconButton(

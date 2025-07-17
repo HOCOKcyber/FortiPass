@@ -12,10 +12,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import com.hocok.fortipass.domain.repository.DataStoreRepository
 import com.hocok.fortipass.presentation.authentication.navigation.AuthNavigation
 import com.hocok.fortipass.presentation.authentication.navigation.AuthRoutes
 import com.hocok.fortipass.presentation.ui.theme.FortiPassTheme
+import com.hocok.fortipass.presentation.ui.theme.backgroundColor
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
@@ -28,6 +30,8 @@ class AuthActivity: ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        window.navigationBarColor = backgroundColor.toArgb()
 
         enableEdgeToEdge()
         setContent{

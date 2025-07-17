@@ -34,7 +34,7 @@ import com.hocok.fortipass.domain.model.ExampleAccount
 import com.hocok.fortipass.domain.model.ExampleDirectory
 import com.hocok.fortipass.presentation.account.components.AccountInfoWrapper
 import com.hocok.fortipass.presentation.directory.components.DirectoryText
-import com.hocok.fortipass.presentation.ui.ActionIcon
+import com.hocok.fortipass.presentation.ui.ActionButton
 import com.hocok.fortipass.presentation.ui.TopBarTitles
 import com.hocok.fortipass.presentation.ui.bottomRoundedCorner
 import com.hocok.fortipass.presentation.ui.components.DecoratorFloatingButton
@@ -93,7 +93,7 @@ private fun AccountDetailsPageContent(
         topBar = {
             TopBarComponent(
                 title = stringResource( TopBarTitles.DETAILS.strId),
-                back = ActionIcon(
+                back = ActionButton.ActionIcon(
                     iconRes = R.drawable.close,
                     onClick = onBack
                 )
@@ -101,7 +101,7 @@ private fun AccountDetailsPageContent(
         },
         floatingActionButton = {
             DecoratorFloatingButton(
-                actionIcon = ActionIcon(
+                actionIcon = ActionButton.ActionIcon(
                     iconRes = R.drawable.edit,
                     onClick = onEdit
                 )
@@ -120,7 +120,7 @@ private fun AccountDetailsPageContent(
             AccountInfoWrapper(
                 title = stringResource(R.string.title_account),
                 action = listOf(
-                    ActionIcon(iconRes = R.drawable.star,
+                    ActionButton.ActionIcon(iconRes = R.drawable.star,
                         onClick = { /*On Details don't need to do nothing*/ },
                         color = if (account.isFavorite) selectedItemColor
                         else onSecondColor
@@ -136,7 +136,7 @@ private fun AccountDetailsPageContent(
             AccountInfoWrapper(
                 title = stringResource(R.string.choose_directory),
                 action = listOf(
-                    ActionIcon(iconRes = R.drawable.expand, onClick = {
+                    ActionButton.ActionIcon(iconRes = R.drawable.expand, onClick = {
                         /*On Details don't need to do nothing*/
                     })
                 ),
@@ -158,7 +158,7 @@ private fun AccountDetailsPageContent(
             Spacer(Modifier.height(10.dp))
             AccountInfoWrapper(
                 title = stringResource(R.string.name_account),
-                action = listOf(ActionIcon(
+                action = listOf(ActionButton.ActionIcon(
                     iconRes = R.drawable.copy,
                     onClick = {
                         clipManager.setClip(copyTextToClip(account.login))
@@ -174,12 +174,12 @@ private fun AccountDetailsPageContent(
             AccountInfoWrapper(
                 title = stringResource(R.string.password),
                 action = listOf(
-                    ActionIcon(
+                    ActionButton.ActionIcon(
                         iconRes =   if (isPasswordVisible) R.drawable.visibility
                         else R.drawable.visibility_off,
                         onClick = changePasswordVisible
                     ),
-                    ActionIcon(
+                    ActionButton.ActionIcon(
                         iconRes = R.drawable.copy,
                         onClick = {
                             clipManager.setClip(copyTextToClip(account.password))
@@ -204,7 +204,7 @@ private fun AccountDetailsPageContent(
             AccountInfoWrapper(
                 title = stringResource(R.string.site_name),
                 action = listOf(
-                    ActionIcon(
+                    ActionButton.ActionIcon(
                         iconRes = R.drawable.gotoweb,
                         onClick = {
                             try {

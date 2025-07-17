@@ -25,15 +25,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hocok.fortipass.R
-import com.hocok.fortipass.presentation.ui.ActionIcon
+import com.hocok.fortipass.presentation.ui.ActionButton
 import com.hocok.fortipass.presentation.ui.theme.FortiPassTheme
 import com.hocok.fortipass.presentation.ui.theme.secondColor
 
 @Composable
 fun StandardTextDecorator(
-    title: String,
     modifier: Modifier = Modifier,
-    action: List<ActionIcon> = emptyList(),
+    title: String = "",
+    action: List<ActionButton.ActionIcon> = emptyList(),
     content: @Composable (modifierFocusRequester: Modifier) -> Unit,
 ){
     val focusRequester = remember { FocusRequester() }
@@ -54,11 +54,13 @@ fun StandardTextDecorator(
                     focusRequester.requestFocus()
                 }
             ) {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.bodySmall,
-                )
-                Spacer(Modifier.height(5.dp))
+                if (title.isNotEmpty()){
+                    Text(
+                        text = title,
+                        style = MaterialTheme.typography.bodySmall,
+                    )
+                    Spacer(Modifier.height(5.dp))
+                }
                 content(
                     Modifier.focusRequester(focusRequester)
                 )
@@ -93,8 +95,8 @@ private fun FortiPassStandardEditTextPreview(){
         StandardTextDecorator(
             title = "Название элемента",
             action = listOf(
-                ActionIcon(iconRes = R.drawable.visibility, onClick = {}),
-                ActionIcon(iconRes = R.drawable.lock, onClick = {  }),
+                ActionButton.ActionIcon(iconRes = R.drawable.visibility, onClick = {}),
+                ActionButton.ActionIcon(iconRes = R.drawable.lock, onClick = {  }),
             )
         ) {
                 Text(

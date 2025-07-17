@@ -6,6 +6,7 @@ import com.hocok.fortipass.data.data_source.AccountDao
 import com.hocok.fortipass.data.data_source.AccountDataBase
 import com.hocok.fortipass.data.repository.AccountRepositoryImp
 import com.hocok.fortipass.data.repository.DataStoreRepositoryImp
+import com.hocok.fortipass.domain.repository.AccountRepository
 import com.hocok.fortipass.domain.repository.DataStoreRepository
 import com.hocok.fortipass.domain.usecase.ChangeFavoriteById
 import com.hocok.fortipass.domain.usecase.GetAccountById
@@ -44,7 +45,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideDataBaseRepository(dao: AccountDao): AccountRepositoryImp{
+    fun provideDataBaseRepository(dao: AccountDao): AccountRepository {
         return AccountRepositoryImp(dao)
     }
 
@@ -101,4 +102,5 @@ object AppModule {
     fun provideDataStoreRepository(application: Application): DataStoreRepository {
         return DataStoreRepositoryImp(application)
     }
+
 }

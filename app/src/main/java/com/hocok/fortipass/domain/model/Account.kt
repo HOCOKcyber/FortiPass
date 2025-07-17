@@ -3,7 +3,9 @@ package com.hocok.fortipass.domain.model
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.hocok.fortipass.domain.util.cipher.CipherManager
+import kotlinx.serialization.Serializable
 
+@Serializable
 @Entity(
     tableName = "accounts",
 //    foreignKeys = [
@@ -34,6 +36,13 @@ fun Account.getDecodeAccount(): Account{
 fun Account.getEncodeAccount(): Account{
     val (encryptPassword, iv) = CipherManager.encrypt(password)
     return copy(password = encryptPassword, iv = iv)
+}
+
+fun Account.toNotCryptoExport(): Account{
+    return copy(
+        password = CipherManager.decrypt(password, iv),
+        iv = ""
+    )
 }
 
 object ExampleAccount{
