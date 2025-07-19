@@ -1,7 +1,6 @@
-package com.hocok.fortipass.presentation.settings
+package com.hocok.fortipass.presentation.settings.mainsetting
 
 import android.net.Uri
-import android.util.Log
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,13 +20,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hocok.fortipass.R
 import com.hocok.fortipass.presentation.MainActivity
+import com.hocok.fortipass.presentation.settings.components.SettingItem
 import com.hocok.fortipass.presentation.ui.ActionButton
 import com.hocok.fortipass.presentation.ui.TopBarTitles
 import com.hocok.fortipass.presentation.ui.components.FortiPassDialog
@@ -37,7 +36,9 @@ import com.hocok.fortipass.presentation.ui.theme.FortiPassTheme
 import com.hocok.fortipass.presentation.ui.theme.secondColor
 
 @Composable
-fun SettingsPage(){
+fun SettingsPage(
+    toImport: () -> Unit,
+){
 
     val viewModel = hiltViewModel<SettingViewModel>()
     val state by viewModel.state.collectAsState()
@@ -48,7 +49,8 @@ fun SettingsPage(){
         state = state,
         changeShowExportDialog = {viewModel.onEvent(SettingEvent.ChangeShowExportDialog)},
         exportData = { context.selectFile(it) },
-        openFile = {openExportData(context, state.uriExportData)}
+        openFile = { openExportData(context, state.uriExportData) },
+        toImport = toImport,
     )
 }
 
@@ -58,6 +60,7 @@ private fun SettingsPageContent(
     changeShowExportDialog: () -> Unit,
     exportData: (Boolean) -> Unit,
     openFile: () -> Unit,
+    toImport: () -> Unit,
     modifier: Modifier = Modifier
 ){
 
@@ -84,6 +87,10 @@ private fun SettingsPageContent(
                 SettingItem(
                     title = stringResource(R.string.go_to_file),
                     onClick = openFile
+                )
+                SettingItem(
+                    title = stringResource(R.string.import_title),
+                    onClick = toImport
                 )
             }
         }
@@ -135,27 +142,6 @@ private fun SettingSection(
     Spacer(Modifier.height(10.dp))
 }
 
-@Composable
-private fun SettingItem(
-    title: String,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-){
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(bottom = 1.dp)
-            .background(secondColor)
-            .clickable { onClick() }
-    ){
-        Text(
-            text = title,
-            style = MaterialTheme.typography.bodyMedium,
-            modifier = Modifier.padding(vertical = 10.dp, horizontal = 8.dp)
-        )
-    }
-}
-
 
 private fun openExportData(activity: MainActivity, strUri: String){
     if (strUri.isEmpty()) return
@@ -175,7 +161,8 @@ private fun SettingsPagePreview(){
             state = SettingState(),
             changeShowExportDialog = {},
             exportData = {},
-            openFile = {}
+            openFile = {},
+            toImport = {},
         )
     }
 }

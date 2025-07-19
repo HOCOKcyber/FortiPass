@@ -14,29 +14,6 @@ import com.hocok.fortipass.R
 import com.hocok.fortipass.presentation.ui.theme.onSecondColor
 
 @Composable
-fun DirectoryTextField(
-    value: String,
-    onValueChange: (String) -> Unit,
-    modifier: Modifier = Modifier,
-){
-    BasicTextField(
-        value = value,
-        onValueChange = onValueChange,
-        singleLine = true,
-        textStyle = MaterialTheme.typography.bodyLarge,
-        modifier = modifier,
-        cursorBrush = Brush.verticalGradient(
-            colors = listOf(onSecondColor, onSecondColor)
-        ),
-    ){
-        Box(){
-            if (value.isEmpty()) Text(text = stringResource(R.string.enter_directory_name))
-            it()
-        }
-    }
-}
-
-@Composable
 fun DirectoryText(
     text: String,
     modifier: Modifier = Modifier,

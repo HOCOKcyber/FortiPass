@@ -57,16 +57,3 @@ private fun DirectoryPreviewText(){
         }
     }
 }
-
-@Preview
-@Composable
-private fun DirectoryPreviewTextField(){
-    FortiPassTheme {
-        DirectoryContainer{
-            DirectoryTextField(
-                value = "Сменить папки",
-                onValueChange = {}
-            )
-        }
-    }
-}

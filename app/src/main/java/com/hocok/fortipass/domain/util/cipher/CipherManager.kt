@@ -12,6 +12,7 @@ object CipherManager {
     private val argon2Kt = Argon2Kt()
 
     private lateinit var cipherHelper: AESGCMHelper
+    lateinit var tempCipherHelper: AESGCMHelper
 
     fun passwordToHash(password: String): Int{
         return password.hashCode()
@@ -22,7 +23,7 @@ object CipherManager {
     }
 
     // Длеаем ключ с помощью Argon2_DI и создаем helper
-    fun createHelper(passwordByteArray: ByteArray, saltByteArray: ByteArray){
+    fun createHelper(passwordByteArray: ByteArray, saltByteArray: ByteArray, isNotTemp: Boolean = true){
         val key = argon2Kt.hash(
             mode = Argon2Mode.ARGON2_ID,
             password = passwordByteArray,
@@ -32,16 +33,17 @@ object CipherManager {
             parallelism = 2,
         )
 
-        cipherHelper =AESGCMHelper(SecretKeySpec(key.rawHashAsByteArray(), "AES"))
+        if (isNotTemp) cipherHelper = AESGCMHelper(SecretKeySpec(key.rawHashAsByteArray(), "AES"))
+        else tempCipherHelper = AESGCMHelper(SecretKeySpec(key.rawHashAsByteArray(), "AES"))
     }
 
-    fun encrypt(password: String): Pair<String, String>{
-        val encryptData = cipherHelper.encrypt(password)
+    fun encrypt(password: String, helper: AESGCMHelper = cipherHelper): Pair<String, String>{
+        val encryptData = helper.encrypt(password)
         return encryptData
     }
 
-    fun decrypt(password: String, iv: String): String{
-        val decryptText = cipherHelper.decrypt(password, iv)
+    fun decrypt(password: String, iv: String, helper: AESGCMHelper = cipherHelper): String{
+        val decryptText = helper.decrypt(password, iv)
         return decryptText
     }
 }

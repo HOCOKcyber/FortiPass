@@ -9,5 +9,6 @@ enum class TopBarTitles(@StringRes val strId: Int) {
     DETAILS(R.string.details),
     STORAGE(R.string.storage),
     GENERATOR(R.string.generator),
-    SETTING(R.string.setting)
+    SETTING(R.string.setting),
+    SETTING_IMPORT(R.string.import_title),
 }

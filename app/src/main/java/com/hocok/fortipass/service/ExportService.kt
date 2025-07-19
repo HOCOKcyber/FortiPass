@@ -72,12 +72,20 @@ class ExportService: Service() {
 
                 dataStoreRep.saveUri(uri)
 
+                val salt = Json.encodeToString(
+                    if (isCrypto) dataStoreRep.salt.first()
+                    else ByteArray(0)
+                )
+
                 val jsonData = getJsonData(isCrypto)
 
                 contentResolver.openFileDescriptor(uri, "w")?.use {
                     FileOutputStream(it.fileDescriptor).use { streamOutput ->
                         streamOutput.write(
-                            "{\"accounts\":${jsonData.first},\"directory\":${jsonData.second}}".toByteArray()
+                            ("{\"accounts\":${jsonData.first}," +
+                                    "\"directory\":${jsonData.second}," +
+                                    "\"salt\":$salt" +
+                                    "}").toByteArray()
                         )
                     }
                 }

@@ -20,9 +20,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hocok.fortipass.R
 import com.hocok.fortipass.presentation.directory.components.DirectoryContainer
-import com.hocok.fortipass.presentation.directory.components.DirectoryTextField
 import com.hocok.fortipass.presentation.ui.ActionButton
 import com.hocok.fortipass.presentation.ui.TopBarTitles
+import com.hocok.fortipass.presentation.ui.components.AppTextField
 import com.hocok.fortipass.presentation.ui.components.TopBarComponent
 import com.hocok.fortipass.presentation.ui.fullRoundedCorner
 import com.hocok.fortipass.presentation.ui.theme.FortiPassTheme
@@ -83,10 +83,11 @@ private fun AddEditDirectoryPageContent(
                 .clip(fullRoundedCorner)
                 .clickable { folderTextField.requestFocus() }
         ) {
-            DirectoryTextField(
+            AppTextField(
                 value = directoryName,
                 onValueChange = changeDirectoryName,
-                modifier.focusRequester(folderTextField)
+                placeholder = stringResource(R.string.enter_directory_name),
+                modifier = modifier.focusRequester(folderTextField)
             )
         }
     }

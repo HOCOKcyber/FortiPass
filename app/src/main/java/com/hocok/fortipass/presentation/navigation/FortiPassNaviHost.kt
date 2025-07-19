@@ -33,7 +33,8 @@ import com.hocok.fortipass.presentation.directory.addedit.AddEditDirectoryPage
 import com.hocok.fortipass.presentation.directory.details.DetailsDirectoryPage
 import com.hocok.fortipass.presentation.generator.GeneratorPage
 import com.hocok.fortipass.presentation.homepage.HomePage
-import com.hocok.fortipass.presentation.settings.SettingsPage
+import com.hocok.fortipass.presentation.settings.mainsetting.SettingsPage
+import com.hocok.fortipass.presentation.settings.navigation.SettingNavHost
 import com.hocok.fortipass.presentation.ui.TopBarTitles
 import com.hocok.fortipass.presentation.ui.theme.onSecondColor
 import com.hocok.fortipass.presentation.ui.theme.secondColor
@@ -137,7 +138,7 @@ fun FortiPassNavHost(
             }
 
             composable<Routes.Setting> {
-                SettingsPage()
+                SettingNavHost()
             }
 
         }

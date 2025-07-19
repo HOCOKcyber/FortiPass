@@ -53,4 +53,13 @@
     <string name="error_wrong_path">Не удалось получить доступ к заданному пути</string>
     <string name="not_found_app_json">Ваше устройство не поддерживаем json</string>
     <string name="file_delete_or_change">Файл удалён, перемещён или изменён</string>
+    <string name="import_title">Импорт</string>
+    <string name="click_to_choose_file">Нажмите для выбора файла</string>
+    <string name="enter_old_masster_password">Введите мастер пароль старого аккаунта</string>
+    <string name="start_export">Начать</string>
+    <string name="error_wrong_import_password">Неверный пароль</string>
+    <string name="error_unknown">Возникла ошибка</string>
+    <string name="error_import_parse">Не удается прочитать файл</string>
+    <string name="import_data_success">Успешно</string>
+    <string name="import_wait">Импортирование...</string>
 </resources>
