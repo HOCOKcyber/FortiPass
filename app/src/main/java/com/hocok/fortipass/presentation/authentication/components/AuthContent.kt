@@ -55,6 +55,7 @@ fun AuthContent(
                 onClick = onContinue,
                 modifier = Modifier
             )
+            Spacer(Modifier.height(10.dp))
         }
     }
 }

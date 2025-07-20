@@ -1,7 +1,9 @@
 package com.hocok.fortipass.domain.model
 
+import android.content.Context
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.hocok.fortipass.R
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -9,16 +11,19 @@ import kotlinx.serialization.Serializable
     tableName = "directories"
 )
 data class Directory(
-    @PrimaryKey(autoGenerate = true) val id: Int? = null,
-    val name: String = "",
+    @PrimaryKey val name: String = "",
 )
 
+fun Directory.getInitOrName(context: Context): String{
+    return name.ifEmpty { context.getString(R.string.directory_init_name) }
+}
+
 object ExampleDirectory{
-    val singleDirectory: Directory = Directory(id = 0, name = "exampleDirectory")
+    val singleDirectory: Directory = Directory(name = "exampleDirectory")
 
     val listOfDirectory = listOf(
-        Directory(id = 0, name = "exampleDirectory"),
-        Directory(id = 1, name = "VK"),
-        Directory(id = 2, name = "Games"),
+        Directory( name = "exampleDirectory"),
+        Directory( name = "VK"),
+        Directory( name = "Games"),
     )
 }

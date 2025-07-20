@@ -53,7 +53,7 @@ fun HomePage(
     toAddAccount: () -> Unit,
     toDetailsAccount: (id: Int) -> Unit,
     toAddDirectory: () -> Unit,
-    toDetailsDirectory: (id: Int) -> Unit,
+    toDetailsDirectory: (name: String) -> Unit,
     modifier: Modifier = Modifier,
 ){
     val viewModel = hiltViewModel<HomeViewModel>()
@@ -90,7 +90,7 @@ private fun HomePageContent(
     changeSpecificAccountFavorite: (id: Int, isFavorite: Boolean) -> Unit,
     toAddAccount: () -> Unit,
     toDetailsAccount: (id: Int) -> Unit,
-    toDetailsDirectory: (id: Int) -> Unit,
+    toDetailsDirectory: (name: String) -> Unit,
     toAddDirectory: () -> Unit,
     modifier: Modifier = Modifier,
 ){
@@ -152,11 +152,11 @@ private fun HomePageContent(
                         )
                     }
                 } else {
-                    items(directoryList, key = {it.id!!}){
+                    items(directoryList, key = {it.name}){
                         DirectoryContainer(
                             modifier = Modifier
                                 .padding(top = 1.dp)
-                                .clickable { toDetailsDirectory(it.id!!) }
+                                .clickable { toDetailsDirectory(it.name) }
                         ) {
                             DirectoryText(
                                 text = it.name

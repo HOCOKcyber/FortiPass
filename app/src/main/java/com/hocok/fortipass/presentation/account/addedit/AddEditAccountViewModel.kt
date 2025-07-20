@@ -11,31 +11,34 @@ import com.hocok.fortipass.domain.model.getDecodeAccount
 import com.hocok.fortipass.domain.model.getEncodeAccount
 import com.hocok.fortipass.domain.usecase.GetAccountById
 import com.hocok.fortipass.domain.usecase.GetDirectories
-import com.hocok.fortipass.domain.usecase.GetDirectoryById
 import com.hocok.fortipass.domain.usecase.SaveAccount
 import com.hocok.fortipass.domain.usecase.Valid
 import com.hocok.fortipass.domain.usecase.ValidAccountData
 import com.hocok.fortipass.presentation.navigation.Routes
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class AddEditAccountViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    val saveAccount: SaveAccount,
-    val getAccountById: GetAccountById,
+    private val saveAccount: SaveAccount,
+    private val getAccountById: GetAccountById,
     getDirectories: GetDirectories,
-    val getDirectoryById: GetDirectoryById,
 ): ViewModel() {
 
     private var _state = MutableStateFlow(AddEditState())
     val state = _state.asStateFlow()
+
+    private val channelEventValidation = Channel<Int>()
+    val eventValidationReceiver = channelEventValidation.receiveAsFlow()
 
     fun onEvent(event: AddEditAccountEvent){
         when(event){
@@ -58,16 +61,24 @@ class AddEditAccountViewModel @Inject constructor(
                 _state.value = _state.value.copy(account = _state.value.account.copy(siteLink = event.newSiteLink))
             }
             is AddEditAccountEvent.OnSave -> {
+                /*Получаем nameDirectory для случая если currentDirectory имеет имя "", а не initName*/
                 val validationState = ValidAccountData().invoke(_state.value.account)
 
-                if (validationState is Valid.Success) {
-                    viewModelScope.launch {
-                        saveAccount(account = _state.value.account.getEncodeAccount())
-                        event.onBack()
+                viewModelScope.launch {
+                    Log.d("AddEditAccountEventValidationReceiver", "scope")
+
+                    if (validationState is Valid.Success) {
+                        Log.d("AddEditAccountEventValidationReceiver", "Save")
+                        saveAccount(account = _state.value.account.copy(
+                            nameDirectory = event.directoryName
+                        ).getEncodeAccount())
                     }
+
+
+                    Log.d("AddEditAccountEventValidationReceiver", "Send")
+                    channelEventValidation.send(validationState.message)
                 }
 
-                event.toastCallBack(validationState.message)
             }
             is AddEditAccountEvent.ChangeBottomSheetShow -> {
                 _state.value = _state.value.copy(isBottomSheetShow = !_state.value.isBottomSheetShow)
@@ -77,7 +88,7 @@ class AddEditAccountViewModel @Inject constructor(
                     isBottomSheetShow = false,
                     currentDirectory = event.newDirectory,
                     account = _state.value.account.copy(
-                        idDirectory = event.newDirectory.id
+                        nameDirectory = event.newDirectory.name
                     )
                 )
             }
@@ -90,14 +101,14 @@ class AddEditAccountViewModel @Inject constructor(
         viewModelScope.launch {
             if (id != null){
                     val account = getAccountById(id).first().getDecodeAccount()
-                    val directory = getDirectoryById(account.idDirectory!!)
+                    val directoryName = account.nameDirectory
                     _state.value = _state.value.copy(
                         account = account,
-                        currentDirectory = directory
+                        currentDirectory = Directory(name = directoryName)
                     )
             } else {
                 _state.value = _state.value.copy(
-                    currentDirectory = getDirectoryById(0)
+                    currentDirectory = Directory(name = "")
                 )
             }
         }
@@ -128,7 +139,6 @@ sealed class AddEditAccountEvent{
     data class ChangeSiteLink(val newSiteLink: String): AddEditAccountEvent()
 
     data class OnSave(
-        val toastCallBack: (message: String) -> Unit,
-        val onBack: () -> Unit
+        val directoryName: String,
     ): AddEditAccountEvent()
 }

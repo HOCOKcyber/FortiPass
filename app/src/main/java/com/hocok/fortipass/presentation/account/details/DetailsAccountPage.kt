@@ -32,6 +32,7 @@ import com.hocok.fortipass.domain.model.Account
 import com.hocok.fortipass.domain.model.Directory
 import com.hocok.fortipass.domain.model.ExampleAccount
 import com.hocok.fortipass.domain.model.ExampleDirectory
+import com.hocok.fortipass.domain.model.getInitOrName
 import com.hocok.fortipass.presentation.account.components.AccountInfoWrapper
 import com.hocok.fortipass.presentation.directory.components.DirectoryText
 import com.hocok.fortipass.presentation.ui.ActionButton
@@ -143,7 +144,7 @@ private fun AccountDetailsPageContent(
                 modifier = Modifier.clip(bottomRoundedCorner)
             ){
                 DirectoryText(
-                    text = directory.name,
+                    text = directory.getInitOrName(context),
                     style = MaterialTheme.typography.bodyMedium
                 )
             }

@@ -1,5 +1,6 @@
 package com.hocok.fortipass.presentation.account.addedit
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -36,11 +37,13 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModel
 import com.hocok.fortipass.R
 import com.hocok.fortipass.domain.model.Account
 import com.hocok.fortipass.domain.model.Directory
 import com.hocok.fortipass.domain.model.ExampleAccount
 import com.hocok.fortipass.domain.model.ExampleDirectory
+import com.hocok.fortipass.domain.model.getInitOrName
 import com.hocok.fortipass.presentation.account.components.AccountInfoWrapper
 import com.hocok.fortipass.presentation.directory.components.DirectoryContainer
 import com.hocok.fortipass.presentation.directory.components.DirectoryText
@@ -68,8 +71,18 @@ fun AddEditAccountPage(
     val viewModel: AddEditAccountViewModel = hiltViewModel()
     val state by viewModel.state.collectAsState()
 
+    val context = LocalContext.current
+
     LaunchedEffect(password) {
         viewModel.onEvent(AddEditAccountEvent.ChangePassword(password))
+
+        Log.d("AddEditAccountEventValidationReceiver", "get message")
+        viewModel.eventValidationReceiver.collect{
+
+            Log.d("AddEditAccountEventValidationReceiver", context.getString(it))
+            Toast.makeText(context, context.getString(it), Toast.LENGTH_LONG).show()
+            if (it == R.string.saved) onBack()
+        }
     }
 
     AddEditAccountPageContent(
@@ -87,12 +100,7 @@ fun AddEditAccountPage(
         changePasswordVisible = {viewModel.onEvent(AddEditAccountEvent.ChangePasswordVisible)},
         changeFavorite = {viewModel.onEvent(AddEditAccountEvent.ChangeFavorite)},
         onBack = onBack,
-        onSave = {toastCallBack -> viewModel.onEvent(
-            AddEditAccountEvent.OnSave(
-                toastCallBack = toastCallBack,
-                onBack = onBack
-            )
-        ) },
+        onSave = { viewModel.onEvent(AddEditAccountEvent.OnSave(state.currentDirectory.getInitOrName(context)) )},
         toGenerator = toGenerator,
         changeAccountDirectory = {viewModel.onEvent(AddEditAccountEvent.ChangeAccountDirectory(it))},
         modifier = modifier,
@@ -116,7 +124,7 @@ private fun AddEditAccountPageContent(
     changeLogin: (String) -> Unit,
     changePassword: (String) -> Unit,
     changeSiteLink: (String) -> Unit,
-    onSave: (toastCallBack: (String) -> Unit) -> Unit,
+    onSave: () -> Unit,
     onBack: () -> Unit,
     toGenerator: () -> Unit,
     modifier: Modifier = Modifier,
@@ -135,7 +143,7 @@ private fun AddEditAccountPageContent(
                 action = listOf(
                     ActionButton.ActionText(
                         textRes = R.string.save,
-                        onClick = { onSave { Toast.makeText(context, it, Toast.LENGTH_LONG).show() } }
+                        onClick = onSave
                     )
                 ),
                 back = ActionButton.ActionIcon(iconRes = R.drawable.close, onClick = onBack)
@@ -180,7 +188,7 @@ private fun AddEditAccountPageContent(
                 modifier = Modifier.clip(bottomRoundedCorner)
             ){
                 DirectoryText(
-                    text = directory.name,
+                    text = directory.getInitOrName(context),
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
@@ -313,7 +321,7 @@ private fun AddEditPreview(){
             changePassword = {},
             changeSiteLink = {},
             changePasswordVisible = {},
-            onSave = {_ -> },
+            onSave = { },
             onBack = {},
             changeFavorite = {},
             toGenerator = {},

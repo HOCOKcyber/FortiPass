@@ -24,11 +24,8 @@ interface AccountDao {
     @Query("SELECT * FROM accounts WHERE id = :id")
     fun getAccountById(id: Int): Flow<Account>
 
-    @Query("SELECT * FROM directories WHERE id = :id")
-    suspend fun getDirectoryById(id: Int?): Directory
-
-    @Query("SELECT * FROM accounts WHERE idDirectory = :idDirectory")
-    suspend fun getAccountsByDirectoryId(idDirectory: Int): List<Account>
+    @Query("SELECT * FROM accounts WHERE nameDirectory = :nameDirectory")
+    suspend fun getAccountsByDirectoryName(nameDirectory: String): List<Account>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAccount(account: Account)

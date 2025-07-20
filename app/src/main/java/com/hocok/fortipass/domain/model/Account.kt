@@ -26,7 +26,7 @@ data class Account(
     val siteLink: String = "",
     val iv: String = "",
     val isFavorite: Boolean = false,
-    val idDirectory: Int? = 0,
+    val nameDirectory: String = "",
 )
 
 fun Account.getDecodeAccount(): Account{
@@ -46,11 +46,11 @@ fun Account.toNotCryptoExport(): Account{
 }
 
 object ExampleAccount{
-    val singleAccount = Account(id = 0, title = "GitHub", login = "exampleLogin", password = "qwerty1234", siteLink = "github.com", isFavorite = true, idDirectory = 0)
+    val singleAccount = Account(id = 0, title = "GitHub", login = "exampleLogin", password = "qwerty1234", siteLink = "github.com", isFavorite = true, nameDirectory = "")
 
     val listOfAccount = listOf(
-        Account(id = 0, title = "GitHub", login = "exampleLogin", password = "qwerty1234", siteLink = "github.com", isFavorite = true, idDirectory = 0),
-        Account(id = 1, title = "Yandex", login = "yandexLogin", password = "yandexPassword", siteLink = "yandex.com", isFavorite = false, idDirectory = 1),
-        Account(id = 2, title = "Google", login = "googleLogin", password = "googlePassword", siteLink = "google.com", isFavorite = true, idDirectory = 2),
+        Account(id = 0, title = "GitHub", login = "exampleLogin", password = "qwerty1234", siteLink = "github.com", isFavorite = true, nameDirectory = "0"),
+        Account(id = 1, title = "Yandex", login = "yandexLogin", password = "yandexPassword", siteLink = "yandex.com", isFavorite = false, nameDirectory = "1"),
+        Account(id = 2, title = "Google", login = "googleLogin", password = "googlePassword", siteLink = "google.com", isFavorite = true, nameDirectory = "2"),
     )
 }

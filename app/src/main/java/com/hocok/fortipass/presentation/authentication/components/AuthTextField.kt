@@ -4,6 +4,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -13,6 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,6 +34,7 @@ fun AuthTextField(
     isShowValue: Boolean,
     onShowValueChange: () -> Unit,
     modifier: Modifier = Modifier,
+    onDone: () -> Unit= {},
 ){
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -45,7 +50,16 @@ fun AuthTextField(
             cursorBrush = SolidColor(onSecondColor),
             modifier = Modifier.weight(1f).padding(start = 10.dp),
             visualTransformation = if (isShowValue) VisualTransformation.None
-            else PasswordVisualTransformation()
+            else PasswordVisualTransformation(),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    onDone()
+                }
+            ),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Text,
+                imeAction = ImeAction.Done
+            ),
         )
         IconButton(
             onClick = onShowValueChange,

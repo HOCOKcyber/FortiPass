@@ -1,11 +1,14 @@
 package com.hocok.fortipass.presentation.authentication.registration
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hocok.fortipass.domain.model.Directory
 import com.hocok.fortipass.domain.util.cipher.CipherManager
 import com.hocok.fortipass.domain.repository.DataStoreRepository
 import com.hocok.fortipass.domain.usecase.PasswordValidation
 import com.hocok.fortipass.domain.usecase.RegistrationPasswordValidation
+import com.hocok.fortipass.domain.usecase.SaveDirectory
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,6 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class RegistrationViewModel @Inject constructor(
     private val dataStoreRep: DataStoreRepository,
+    private val saveDirectory: SaveDirectory,
 ): ViewModel() {
 
     private val validationPassword: RegistrationPasswordValidation = RegistrationPasswordValidation()
@@ -60,6 +64,14 @@ class RegistrationViewModel @Inject constructor(
                     }
                 }
             }
+
+            /*Make sure that directory with name = "Без назваия" exist*/
+            is RegistrationEvent.CreateFirstFolder -> {
+                viewModelScope.launch {
+                    Log.d("Registration", "Save direct with name: ${event.name}")
+                    saveDirectory(Directory(name = event.name))
+                }
+            }
         }
     }
 }
@@ -77,4 +89,7 @@ sealed class RegistrationEvent{
     data object ChangePasswordVisibility: RegistrationEvent()
     data object ChangeRepeatedPasswordVisibility: RegistrationEvent()
     data object OnContinue: RegistrationEvent()
+
+    /*Make sure that directory with name = "Без назваия" exist*/
+    data class CreateFirstFolder(val name: String): RegistrationEvent()
 }

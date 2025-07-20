@@ -60,6 +60,7 @@ private fun LoginPageContent(
             onValueChange = onPasswordChange,
             isShowValue = isShowPassword,
             onShowValueChange = onPasswordVisibilityChange,
+            onDone = onContinue
         )
     }
 }

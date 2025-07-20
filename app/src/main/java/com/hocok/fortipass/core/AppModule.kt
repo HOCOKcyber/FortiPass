@@ -11,9 +11,8 @@ import com.hocok.fortipass.domain.repository.DataStoreRepository
 import com.hocok.fortipass.domain.usecase.ChangeFavoriteById
 import com.hocok.fortipass.domain.usecase.GetAccountById
 import com.hocok.fortipass.domain.usecase.GetAccounts
-import com.hocok.fortipass.domain.usecase.GetAccountsByDirectoryId
+import com.hocok.fortipass.domain.usecase.GetAccountsByDirectoryName
 import com.hocok.fortipass.domain.usecase.GetDirectories
-import com.hocok.fortipass.domain.usecase.GetDirectoryById
 import com.hocok.fortipass.domain.usecase.SaveAccount
 import com.hocok.fortipass.domain.usecase.SaveDirectory
 import dagger.Module
@@ -87,14 +86,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideUseCaseGetDirectoryById(repositoryImp: AccountRepositoryImp): GetDirectoryById{
-        return GetDirectoryById(repositoryImp)
-    }
-
-    @Provides
-    @Singleton
-    fun provideUseCaseGetAccountsByDirectoryId(repositoryImp: AccountRepositoryImp): GetAccountsByDirectoryId{
-        return GetAccountsByDirectoryId(repositoryImp)
+    fun provideUseCaseGetAccountsByDirectoryId(repositoryImp: AccountRepositoryImp): GetAccountsByDirectoryName{
+        return GetAccountsByDirectoryName(repositoryImp)
     }
 
     @Provides

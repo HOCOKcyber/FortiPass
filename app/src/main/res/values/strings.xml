@@ -47,6 +47,7 @@
     <string name="cipher_type_export_data">Зашифрованные</string>
     <string name="open_type_export_data">Без шифрования</string>
     <string name="save">Сохранить</string>
+    <string name="saved">Сохранено</string>
     <string name="export_data_notify_title">Экспортирование данных</string>
     <string name="export_data_success">Успешно</string>
     <string name="export_data_fail">Ошибка</string>
@@ -61,5 +62,10 @@
     <string name="error_unknown">Возникла ошибка</string>
     <string name="error_import_parse">Не удается прочитать файл</string>
     <string name="import_data_success">Успешно</string>
-    <string name="import_wait">Импортирование...</string>
+    <string name="import_wait">Импортирование…</string>
+    <string name="directory_init_name">Без названия</string>
+    <string name="error_wrong_account_title">Название не должно быть пустым</string>
+    <string name="error_wrong_account_login">Логин не должен быть пустым</string>
+    <string name="error_wrong_account_password">Пароль не должен быть пустым</string>
+    <string name="error_wrong_account_sitelink">Ссылка не должна быть пустой</string>
 </resources>

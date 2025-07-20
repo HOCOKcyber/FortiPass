@@ -24,7 +24,6 @@ class HomeViewModel @Inject constructor(
     private val getAccountUseCase: GetAccounts,
     private val changeFavoriteById: ChangeFavoriteById,
     private val getDirectoriesUseCase: GetDirectories,
-    private val saveDirectory: SaveDirectory,
 ): ViewModel() {
 
     private var getAccountJob: Job? = null
@@ -35,11 +34,6 @@ class HomeViewModel @Inject constructor(
     init {
         getAccount(false)
         getDirectories()
-
-        /*Make sure that directory with id=0 name = "Без назваия" exist*/
-        viewModelScope.launch {
-            saveDirectory(Directory(id = 0, name = "Без названия"))
-        }
     }
 
     fun onEvent(event: HomeEvent){
@@ -76,7 +70,7 @@ class HomeViewModel @Inject constructor(
 
     private fun getDirectories(){
         getDirectoriesUseCase().onEach {
-            Log.d("direct", it.toString())
+            Log.d("Home Page", it.toString())
             _state.value = _state.value.copy(directoryList = it)
         }.launchIn(viewModelScope)
     }

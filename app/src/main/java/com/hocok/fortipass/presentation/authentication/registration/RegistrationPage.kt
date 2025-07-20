@@ -1,5 +1,6 @@
 package com.hocok.fortipass.presentation.authentication.registration
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -8,6 +9,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,6 +31,9 @@ fun RegistrationPage(
     val context = LocalContext.current
 
     LaunchedEffect(context) {
+        Log.d("Registration", "Prepare to create")
+        viewModel.onEvent(RegistrationEvent.CreateFirstFolder(context.getString(R.string.directory_init_name)))
+        Log.d("Registration", "Created")
         viewModel.validationReceiver.collect{
             if (it.isSuccess) onContinue()
             else Toast.makeText(context, context.getText(it.errorMessage!!), Toast.LENGTH_SHORT).show()
@@ -59,6 +65,9 @@ private fun RegistrationContent(
     onShowRepeatedPasswordChange: () -> Unit,
     onContinue: () -> Unit,
 ){
+
+    val repeatPasswordFocus = FocusRequester()
+
     AuthContent(
         title = stringResource(R.string.registation),
         description = stringResource(R.string.input_password),
@@ -68,14 +77,17 @@ private fun RegistrationContent(
             value = password,
             onValueChange = onPasswordChange,
             isShowValue = isShowPassword,
-            onShowValueChange = onShowPasswordChange
+            onShowValueChange = onShowPasswordChange,
+            onDone = {repeatPasswordFocus.requestFocus()}
         )
         Spacer(Modifier.height(5.dp))
         AuthTextField(
             value = repeatedPassword,
             onValueChange = onRepeatedPasswordChange,
             isShowValue = isShowRepeatedPassword,
-            onShowValueChange = onShowRepeatedPasswordChange
+            onShowValueChange = onShowRepeatedPasswordChange,
+            modifier = Modifier.focusRequester(repeatPasswordFocus),
+            onDone = onContinue
         )
     }
 }

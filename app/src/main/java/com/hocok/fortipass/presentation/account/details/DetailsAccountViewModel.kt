@@ -9,7 +9,6 @@ import com.hocok.fortipass.domain.model.Directory
 import com.hocok.fortipass.domain.model.getDecodeAccount
 import com.hocok.fortipass.domain.usecase.ChangeFavoriteById
 import com.hocok.fortipass.domain.usecase.GetAccountById
-import com.hocok.fortipass.domain.usecase.GetDirectoryById
 import com.hocok.fortipass.presentation.navigation.Routes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,7 +25,6 @@ class DetailsAccountViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     getAccountById: GetAccountById,
     val changeFavoriteById: ChangeFavoriteById,
-    val getDirectoryById: GetDirectoryById,
 ): ViewModel() {
 
     private val id: Int = savedStateHandle.toRoute<Routes.DetailsAccount>().id
@@ -50,10 +48,9 @@ class DetailsAccountViewModel @Inject constructor(
     init {
         getAccountById(id)
             .onEach {
-                val directory = getDirectoryById(it.idDirectory)
                 _state.value = _state.value.copy(
                     account = it.getDecodeAccount(),
-                    directory = directory
+                    directory = Directory(name = it.nameDirectory)
                 )
             }.launchIn(viewModelScope)
     }

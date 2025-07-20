@@ -78,9 +78,7 @@ class ImportViewModel @Inject constructor(
                     )
                 }
                 for (directory in importData.directory){
-                    dbRep.saveDirectory(directory.copy(
-                        id = null
-                    ))
+                    dbRep.saveDirectory(directory)
                 }
                 channelViewEvent.send(R.string.import_data_success)
             } catch (e: AEADBadTagException){

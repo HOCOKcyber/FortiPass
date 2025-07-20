@@ -4,10 +4,10 @@ import com.hocok.fortipass.domain.model.Account
 import com.hocok.fortipass.domain.repository.AccountRepository
 import javax.inject.Inject
 
-class GetAccountsByDirectoryId @Inject constructor(
+class GetAccountsByDirectoryName @Inject constructor(
     val repository: AccountRepository
 ){
-    suspend operator fun invoke(idDirectory: Int): List<Account>{
-        return repository.getAccountsByDirectoryId(idDirectory)
+    suspend operator fun invoke(nameDirectory: String): List<Account>{
+        return repository.getAccountsByDirectoryName(nameDirectory)
     }
 }

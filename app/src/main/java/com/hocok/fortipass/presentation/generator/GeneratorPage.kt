@@ -138,8 +138,8 @@ private fun GeneratorPageContent(
                     onClick = onBack,
                 ),
                 action =
-                    if (isFromAddEdit) listOf(ActionButton.ActionIcon(
-                        iconRes = R.drawable.done,
+                    if (isFromAddEdit) listOf(ActionButton.ActionText(
+                        textRes = R.string.save,
                         onClick = {savePasswordFromGenerator(password.text)}
                     )) else emptyList<ActionButton.ActionIcon>()
 
@@ -166,20 +166,22 @@ private fun GeneratorPageContent(
                modifier = Modifier.fillMaxWidth()
            )
            Spacer(Modifier.height(10.dp))
-           Button(
-               onClick = {
-                   val clitData = ClipData.newPlainText("plain Text", password.text)
-                   val clipEntry = ClipEntry(clitData)
-                   clipManager.setClip(clipEntry)
-                   Toast.makeText(context, R.string.copied, Toast.LENGTH_SHORT).show()
-               },
-               modifier = Modifier.fillMaxWidth()
-           ) {
-               Text(
-                   text = stringResource(R.string.copy),
-                   style = MaterialTheme.typography.bodyLarge,
-                   color = secondColor
-               )
+           if (!isFromAddEdit){
+               Button(
+                   onClick = {
+                       val clitData = ClipData.newPlainText("plain Text", password.text)
+                       val clipEntry = ClipEntry(clitData)
+                       clipManager.setClip(clipEntry)
+                       Toast.makeText(context, R.string.copied, Toast.LENGTH_SHORT).show()
+                   },
+                   modifier = Modifier.fillMaxWidth()
+               ) {
+                   Text(
+                       text = stringResource(R.string.copy),
+                       style = MaterialTheme.typography.bodyLarge,
+                       color = secondColor
+                   )
+               }
            }
            Spacer(Modifier.height(10.dp))
            when(generatorType){
