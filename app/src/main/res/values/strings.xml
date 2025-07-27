@@ -68,4 +68,6 @@
     <string name="error_wrong_account_login">Логин не должен быть пустым</string>
     <string name="error_wrong_account_password">Пароль не должен быть пустым</string>
     <string name="error_wrong_account_sitelink">Ссылка не должна быть пустой</string>
+    <string name="search">Искать</string>
+    <string name="in_symbol">в</string>
 </resources>

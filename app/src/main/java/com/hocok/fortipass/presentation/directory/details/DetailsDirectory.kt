@@ -29,6 +29,7 @@ import com.hocok.fortipass.presentation.ui.theme.FortiPassTheme
 fun DetailsDirectoryPage(
     toDetailsAccount: (id: Int)-> Unit,
     onBack: () -> Unit,
+    toSearch: (String) -> Unit,
     modifier: Modifier = Modifier,
 ){
     val viewModel = hiltViewModel<DetailsDirectoryViewModel>()
@@ -39,6 +40,7 @@ fun DetailsDirectoryPage(
         directory = state.directory,
         accountList = state.accountsList,
         onBack = onBack,
+        toSearch = toSearch,
         modifier = modifier
     )
 }
@@ -49,6 +51,7 @@ fun DetailsDirectoryPageContent(
     directory: Directory,
     toDetailsAccount: (id: Int)-> Unit,
     onBack: () -> Unit,
+    toSearch: (String) -> Unit,
     modifier: Modifier = Modifier,
 ){
     Scaffold(
@@ -59,6 +62,12 @@ fun DetailsDirectoryPageContent(
                 back = ActionButton.ActionIcon(
                         iconRes = R.drawable.close,
                         onClick = onBack
+                ),
+                action = listOf(
+                    ActionButton.ActionIcon(
+                        iconRes = R.drawable.search,
+                        onClick = {toSearch(directory.name)}
+                    )
                 )
             )
         },
@@ -91,7 +100,8 @@ fun DetailsDirectoryPagePreview(){
             toDetailsAccount = {},
             onBack = {},
             accountList = ExampleAccount.listOfAccount,
-            directory = ExampleDirectory.singleDirectory
+            directory = ExampleDirectory.singleDirectory,
+            toSearch = {}
         )
     }
 }

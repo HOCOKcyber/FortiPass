@@ -46,4 +46,8 @@ class AccountRepositoryImp @Inject constructor(
     override suspend fun changeFavoriteById(id: Int, changedFavorite: Boolean) {
         dao.changeFavoriteById(id, changedFavorite)
     }
+
+    override fun searchAccountByRequest(request: String, directoryName: String) : Flow<List<Account>>{
+        return dao.searchAccountByRequest(request, directoryName)
+    }
 }

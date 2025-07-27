@@ -38,4 +38,11 @@ interface AccountDao {
 
     @Query("UPDATE accounts SET isFavorite = :changedFavorite WHERE id = :id")
     suspend fun changeFavoriteById(id: Int, changedFavorite: Boolean)
+
+    @Query("SELECT * FROM accounts " +
+            "WHERE nameDirectory LIKE :directoryName || '%' AND" +
+            "(title LIKE '%' || :request || '%' " +
+            "OR  login LIKE '%' || :request || '%' " +
+            "OR  siteLink LIKE '%' || :request || '%')")
+    fun searchAccountByRequest(request: String, directoryName: String) : Flow<List<Account>>
 }

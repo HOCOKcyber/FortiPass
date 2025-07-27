@@ -13,6 +13,8 @@ interface AccountRepository {
 
     fun getAccountById(id: Int): Flow<Account>
 
+    fun searchAccountByRequest(request: String, directoryName: String) : Flow<List<Account>>
+
     suspend fun getAccountsByDirectoryName(nameDirectory: String): List<Account>
 
     suspend fun insertAccount(account: Account)

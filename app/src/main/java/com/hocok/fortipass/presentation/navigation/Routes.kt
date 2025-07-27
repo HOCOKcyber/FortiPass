@@ -19,6 +19,8 @@ sealed class Routes {
     data class AddEditAccount(val id: Int?): Routes()
     @Serializable
     data class AddEditDirectory(val id: Int?): Routes()
+    @Serializable
+    data class Search(val directoryName: String? = null): Routes()
 }
 
 data class BottomRoutes(

@@ -54,6 +54,7 @@ fun HomePage(
     toDetailsAccount: (id: Int) -> Unit,
     toAddDirectory: () -> Unit,
     toDetailsDirectory: (name: String) -> Unit,
+    toSearch: () -> Unit,
     modifier: Modifier = Modifier,
 ){
     val viewModel = hiltViewModel<HomeViewModel>()
@@ -73,6 +74,7 @@ fun HomePage(
         toAddAccount = toAddAccount,
         toAddDirectory = toAddDirectory,
         toDetailsAccount = toDetailsAccount,
+        toSearch = toSearch,
         modifier = modifier,
     )
 }
@@ -92,6 +94,7 @@ private fun HomePageContent(
     toDetailsAccount: (id: Int) -> Unit,
     toDetailsDirectory: (name: String) -> Unit,
     toAddDirectory: () -> Unit,
+    toSearch: () -> Unit,
     modifier: Modifier = Modifier,
 ){
     Scaffold(
@@ -102,7 +105,7 @@ private fun HomePageContent(
                 action = listOf(
                     ActionButton.ActionIcon(
                         iconRes = R.drawable.search,
-                        onClick = {/*TODO("realise search")*/ }
+                        onClick = toSearch
                     ),
                     ActionButton.ActionIcon(
                         iconRes = if (isAccountsDisplay) R.drawable.folder
@@ -305,7 +308,8 @@ private fun HomePagePreview(){
             toAddAccount = {},
             changeFavoriteDisplay = {},
             changeDialogDisplay = {},
-            toDetailsDirectory = {}
+            toDetailsDirectory = {},
+            toSearch = {},
         )
     }
 }
