@@ -11,7 +11,7 @@ class ValidAccountData {
         if (accountData.title.isEmpty()) return Valid.TitleError(R.string.error_wrong_account_title)
         if (accountData.login.isEmpty()) return Valid.LoginError(R.string.error_wrong_account_login)
         if (accountData.password.isEmpty()) return Valid.PasswordError(R.string.error_wrong_account_password)
-        if (accountData.password.length <= 8) return Valid.PasswordError(R.string.password_error_lenght)
+        if (accountData.password.length < 8) return Valid.PasswordError(R.string.password_error_lenght)
         if (accountData.siteLink.isEmpty()) return Valid.SiteLinkError(R.string.error_wrong_account_sitelink)
         return Valid.Success(R.string.saved)
     }

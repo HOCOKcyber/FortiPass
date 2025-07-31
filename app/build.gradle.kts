@@ -44,7 +44,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.6.8"
     }
     packaging {
         resources {
@@ -73,9 +73,9 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:2.2.0")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:2.2.0")
     implementation("androidx.compose.material:material:1.8.3")
-
-    implementation("androidx.autofill:autofill:1.3.0")
 
     // Room
     val room_version = "2.7.2"
@@ -106,4 +106,8 @@ dependencies {
 
     // Argon2
     implementation("com.lambdapioneer.argon2kt:argon2kt:1.6.0")
+
+    // Coil
+    implementation("io.coil-kt.coil3:coil-compose:3.3.0")
+    implementation("io.coil-kt.coil3:coil-network-okhttp:3.3.0")
 }

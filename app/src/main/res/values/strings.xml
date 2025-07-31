@@ -37,7 +37,7 @@
     <string name="input_password">Введите мастер-пароль</string>
     <string name="continue_text">Продолжить</string>
     <string name="registation">Регистрация</string>
-    <string name="password_error_lenght">Пароль должен быть более 8 символов</string>
+    <string name="password_error_lenght">Пароль должен быть более 7 символов</string>
     <string name="password_errro_diffrence">Пароли должны совпадать</string>
     <string name="repeat_password">Повторите пароль</string>
     <string name="export_data">Экспортировать данные</string>

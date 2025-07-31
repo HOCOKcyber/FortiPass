@@ -5,11 +5,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -18,14 +17,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
+import coil3.request.ImageRequest
+import coil3.request.crossfade
 import com.hocok.fortipass.R
 import com.hocok.fortipass.domain.model.Account
 import com.hocok.fortipass.presentation.ui.ActionButton
 import com.hocok.fortipass.presentation.ui.theme.FortiPassTheme
-import com.hocok.fortipass.presentation.ui.theme.mainTextColor
+import com.hocok.fortipass.presentation.ui.theme.backgroundColor
 import com.hocok.fortipass.presentation.ui.theme.onSecondColor
 import com.hocok.fortipass.presentation.ui.theme.secondColor
 import com.hocok.fortipass.presentation.ui.theme.selectedItemColor
@@ -77,22 +81,26 @@ fun AccountPresentation(
     }
 }
 
-/*
-* TODO(Replace with Coin)*/
+
 @Composable
 private fun AccountImage(
     link: String,
     modifier: Modifier = Modifier
 ){
     Box(
-        modifier = modifier.size(33.dp)
-            .clip(RoundedCornerShape(10.dp))
+        modifier = modifier.size(35.dp)
+            .clip(CircleShape)
+            .background(backgroundColor)
     ){
-        Icon(
-            painter = painterResource( R.drawable.account ),
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data("https://www.google.com/s2/favicons?domain=${link}&sz=${32}")
+                .crossfade(true)
+                .build(),
+            error = painterResource(R.drawable.account),
             contentDescription = null,
-            tint = mainTextColor,
-            modifier = Modifier.fillMaxSize()
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.size(32.dp).align(Alignment.Center)
         )
     }
 }
