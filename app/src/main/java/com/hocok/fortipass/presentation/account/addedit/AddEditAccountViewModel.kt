@@ -1,6 +1,7 @@
 package com.hocok.fortipass.presentation.account.addedit
 
 import android.util.Log
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -49,16 +50,16 @@ class AddEditAccountViewModel @Inject constructor(
                 _state.value = _state.value.copy(account = _state.value.account.copy(isFavorite = !_state.value.account.isFavorite))
             }
             is AddEditAccountEvent.ChangeTitle -> {
-                _state.value = _state.value.copy(account = _state.value.account.copy(title = event.newTitle))
+                _state.value = _state.value.copy(account = _state.value.account.copy(title = event.newTitle.text))
             }
             is AddEditAccountEvent.ChangeLogin -> {
-                _state.value = _state.value.copy(account = _state.value.account.copy(login = event.newLogin))
+                _state.value = _state.value.copy(account = _state.value.account.copy(login = event.newLogin.text))
             }
             is AddEditAccountEvent.ChangePassword -> {
-                _state.value = _state.value.copy(account = _state.value.account.copy(password = event.newPassword))
+                _state.value = _state.value.copy(account = _state.value.account.copy(password = event.newPassword.text))
             }
             is AddEditAccountEvent.ChangeSiteLink -> {
-                _state.value = _state.value.copy(account = _state.value.account.copy(siteLink = event.newSiteLink))
+                _state.value = _state.value.copy(account = _state.value.account.copy(siteLink = event.newSiteLink.text))
             }
             is AddEditAccountEvent.OnSave -> {
                 /*Получаем nameDirectory для случая если currentDirectory имеет имя "", а не initName*/
@@ -133,10 +134,10 @@ sealed class AddEditAccountEvent{
     data object ChangePasswordVisible: AddEditAccountEvent()
     data object ChangeBottomSheetShow: AddEditAccountEvent()
     data class ChangeAccountDirectory(val newDirectory: Directory): AddEditAccountEvent()
-    data class ChangeTitle(val newTitle: String): AddEditAccountEvent()
-    data class ChangeLogin(val newLogin: String): AddEditAccountEvent()
-    data class ChangePassword(val newPassword: String): AddEditAccountEvent()
-    data class ChangeSiteLink(val newSiteLink: String): AddEditAccountEvent()
+    data class ChangeTitle(val newTitle: TextFieldValue): AddEditAccountEvent()
+    data class ChangeLogin(val newLogin: TextFieldValue): AddEditAccountEvent()
+    data class ChangePassword(val newPassword: TextFieldValue): AddEditAccountEvent()
+    data class ChangeSiteLink(val newSiteLink: TextFieldValue): AddEditAccountEvent()
 
     data class OnSave(
         val directoryName: String,

@@ -236,7 +236,7 @@ private fun DetailText(
         modifier = modifier
     ) {
         Text(
-            text = if (isTextVisible) text else "*".repeat(text.length),
+            text = if (isTextVisible) text else "*".repeat(8),
             modifier = Modifier,
             color = onSecondColor,
             maxLines = 1,

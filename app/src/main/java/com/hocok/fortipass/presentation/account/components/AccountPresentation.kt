@@ -69,14 +69,6 @@ fun AccountPresentation(
                 isFavorite = account.isFavorite,
                 modifier = Modifier.padding(end = 10.dp)
             )
-            AccountActionIcon(
-                actionIcon = ActionButton.ActionIcon(
-                    onClick = {
-                        /*TODO("сделать меню")*/
-                    },
-                    iconRes = R.drawable.like_menu,
-                ),
-            )
         }
     }
 }

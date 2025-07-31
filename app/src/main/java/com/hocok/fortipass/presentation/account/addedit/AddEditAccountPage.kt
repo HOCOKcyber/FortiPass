@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -30,9 +31,14 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -74,7 +80,7 @@ fun AddEditAccountPage(
     val context = LocalContext.current
 
     LaunchedEffect(password) {
-        viewModel.onEvent(AddEditAccountEvent.ChangePassword(password))
+        viewModel.onEvent(AddEditAccountEvent.ChangePassword(TextFieldValue(password)))
 
         Log.d("AddEditAccountEventValidationReceiver", "get message")
         viewModel.eventValidationReceiver.collect{
@@ -120,10 +126,10 @@ private fun AddEditAccountPageContent(
     changeBottomSheetShow: () -> Unit,
     changePasswordVisible: () -> Unit,
     changeFavorite: () -> Unit,
-    changeAccountTitle: (String) -> Unit,
-    changeLogin: (String) -> Unit,
-    changePassword: (String) -> Unit,
-    changeSiteLink: (String) -> Unit,
+    changeAccountTitle: (TextFieldValue) -> Unit,
+    changeLogin: (TextFieldValue) -> Unit,
+    changePassword: (TextFieldValue) -> Unit,
+    changeSiteLink: (TextFieldValue) -> Unit,
     onSave: () -> Unit,
     onBack: () -> Unit,
     toGenerator: () -> Unit,
@@ -131,6 +137,7 @@ private fun AddEditAccountPageContent(
 ){
     val context = LocalContext.current
     val (titleFocus, loginFocus, passwordFocus, linkFocus) = FocusRequester.createRefs()
+    val focusManager = LocalFocusManager.current
 
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
@@ -169,13 +176,18 @@ private fun AddEditAccountPageContent(
                         else onSecondColor
                     )
                 ),
-                modifier = Modifier.clickable { titleFocus.requestFocus() }
+                modifier = Modifier
                     .padding(bottom = 1.dp).clip(topRoundedCorner)
             ){
                 AddEditTextField(
                     value = account.title,
                     onValueChange = changeAccountTitle,
+                    onDone = {
+                        focusManager.clearFocus()
+                        changeBottomSheetShow()
+                    },
                     modifier = Modifier.focusRequester(titleFocus)
+                        .fillMaxWidth(),
                 )
             }
 
@@ -199,16 +211,19 @@ private fun AddEditAccountPageContent(
                 style = MaterialTheme.typography.bodyLarge,
                 color = secondaryTextColor,
             )
+            Spacer(Modifier.height(10.dp))
 
             AccountInfoWrapper(
                 title = stringResource(R.string.name_account),
-                modifier = Modifier.clickable { loginFocus.requestFocus() }
+                modifier = Modifier
                     .padding(bottom = 1.dp).clip(topRoundedCorner)
             ) {
                 AddEditTextField(
                     value = account.login,
                     onValueChange = changeLogin,
+                    onDone = {passwordFocus.requestFocus()},
                     modifier = Modifier.focusRequester(loginFocus)
+                        .fillMaxWidth()
                 )
             }
             AccountInfoWrapper(
@@ -221,14 +236,16 @@ private fun AddEditAccountPageContent(
                     ),
                     ActionButton.ActionIcon(iconRes = R.drawable.lock, onClick = toGenerator)
                 ),
-                modifier = Modifier.clickable { passwordFocus.requestFocus() }
+                modifier = Modifier
                     .clip(bottomRoundedCorner)
             ){
                 AddEditTextField(
                     value = account.password,
                     onValueChange = changePassword,
                     isTextVisible = isPasswordVisible,
+                    onDone = {linkFocus.requestFocus()},
                     modifier = Modifier.focusRequester(passwordFocus)
+                        .fillMaxWidth()
                 )
             }
 
@@ -238,15 +255,21 @@ private fun AddEditAccountPageContent(
                 style = MaterialTheme.typography.bodyLarge,
                 color = secondaryTextColor,
             )
+            Spacer(Modifier.height(10.dp))
+
             AccountInfoWrapper(
                 title = stringResource(R.string.site_name),
-                modifier = Modifier.clickable { linkFocus.requestFocus() }
+                modifier = Modifier
                     .clip(fullRoundedCorner)
             ){
                 AddEditTextField(
                     value = account.siteLink,
                     onValueChange = changeSiteLink,
+                    onDone = {
+                        focusManager.clearFocus()
+                    },
                     modifier = Modifier.focusRequester(linkFocus)
+                        .fillMaxWidth()
                 )
             }
         }
@@ -286,18 +309,30 @@ private fun AddEditAccountPageContent(
 @Composable
 private fun AddEditTextField(
     value: String,
-    onValueChange: (String) -> Unit,
+    onValueChange: (TextFieldValue) -> Unit,
     modifier: Modifier = Modifier,
     isTextVisible: Boolean = true,
+    onDone: () -> Unit = {},
 ){
+    val textValue = TextFieldValue(
+        text = if (isTextVisible) value else "*".repeat(8),
+        selection = TextRange(value.length)
+    )
+
     BasicTextField(
-        value = value,
+        value = textValue,
         onValueChange = onValueChange,
         singleLine = true,
         textStyle = MaterialTheme.typography.bodyMedium,
-        visualTransformation = if (isTextVisible) VisualTransformation.None else PasswordVisualTransformation(),
         keyboardOptions = KeyboardOptions.Default.copy(
-            keyboardType = if (isTextVisible) KeyboardType.Text else KeyboardType.Password
+            keyboardType = if (isTextVisible) KeyboardType.Text else KeyboardType.Password,
+            imeAction = ImeAction.Done
+        ),
+        keyboardActions = KeyboardActions(
+            onDone = {
+                onDone()
+
+            }
         ),
         modifier = modifier,
         cursorBrush = Brush.verticalGradient(
