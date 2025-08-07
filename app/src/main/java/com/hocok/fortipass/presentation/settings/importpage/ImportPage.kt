@@ -228,7 +228,6 @@ private fun readTextFromUri(uri: Uri, contentResolver: ContentResolver): String 
 
 @Preview(
     showBackground = true,
-    showSystemUi = true,
 )
 @Composable
 private fun ImportPagePreview(){
@@ -237,7 +236,7 @@ private fun ImportPagePreview(){
             password = "",
             uri = "",
             isCrypto = true,
-            isImporting = true,
+            isImporting = false,
             chooseFile = {},
             onStart = {},
             onBack = {},

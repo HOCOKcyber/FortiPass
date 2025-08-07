@@ -158,7 +158,6 @@ private fun TopSearchBar(
 
 @Preview(
     showBackground = true,
-    showSystemUi = true,
 )
 @Composable
 private fun SearchPagePreview(){

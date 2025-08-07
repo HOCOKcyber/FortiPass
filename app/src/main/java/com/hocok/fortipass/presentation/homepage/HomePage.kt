@@ -289,8 +289,7 @@ private fun DialogSelectTypeToAddPreview(){
 }
 
 @Preview(
-    showBackground = true,
-    showSystemUi = true
+    showBackground = true
 )
 @Composable
 private fun HomePagePreview(){

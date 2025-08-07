@@ -30,6 +30,7 @@ import com.hocok.fortipass.presentation.ui.components.TopBarComponent
 import com.hocok.fortipass.presentation.ui.fullRoundedCorner
 import com.hocok.fortipass.presentation.ui.theme.FortiPassTheme
 import com.hocok.fortipass.presentation.ui.theme.secondColor
+import androidx.core.net.toUri
 
 @Composable
 fun SettingsPage(
@@ -142,13 +143,12 @@ private fun SettingSection(
 private fun openExportData(activity: MainActivity, strUri: String){
     if (strUri.isEmpty()) return
 
-    val uri = Uri.parse(strUri)
+    val uri = strUri.toUri()
     activity.openFile(uri)
 }
 
 @Preview(
     showBackground = true,
-    showSystemUi = true,
 )
 @Composable
 private fun SettingsPagePreview(){
