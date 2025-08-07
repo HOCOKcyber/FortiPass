@@ -1,7 +1,9 @@
 package com.hocok.fortipass.presentation
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -16,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalDensity
+import androidx.core.view.WindowCompat
 import com.hocok.fortipass.R
 import com.hocok.fortipass.presentation.navigation.FortiPassNavHost
 import com.hocok.fortipass.presentation.ui.theme.FortiPassTheme
@@ -25,6 +28,8 @@ import com.hocok.fortipass.presentation.util.SafeFileCallBack
 import com.hocok.fortipass.presentation.util.SafeFileContract
 import com.hocok.fortipass.util.FileHelper
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.Duration
+import java.time.LocalDateTime
 
 
 @AndroidEntryPoint
@@ -38,10 +43,15 @@ class MainActivity : ComponentActivity() {
         SafeFileCallBack(false, this)
     )
 
+    private lateinit var exitTime: LocalDateTime
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         window.navigationBarColor = secondColor.toArgb()
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
+
         setContent {
             FortiPassTheme {
                 FortiPassNavHost(
@@ -54,8 +64,20 @@ class MainActivity : ComponentActivity() {
 
     override fun onRestart() {
         super.onRestart()
-//        val intent = Intent(this, AuthActivity::class.java)
-//        startActivity(intent)
+        val entryTime = LocalDateTime.now()
+        val timeLeft = Duration.between(exitTime, entryTime)
+
+        val timeoutInSecond = 60
+
+        if (timeLeft.seconds >= timeoutInSecond) {
+            val intent = Intent(this, AuthActivity::class.java)
+            startActivity(intent)
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        exitTime = LocalDateTime.now()
     }
 
 

@@ -67,7 +67,6 @@ fun AccountPresentation(
                     iconRes = R.drawable.star,
                 ),
                 isFavorite = account.isFavorite,
-                modifier = Modifier.padding(end = 10.dp)
             )
         }
     }

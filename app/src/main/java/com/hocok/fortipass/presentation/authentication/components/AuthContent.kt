@@ -1,5 +1,6 @@
 package com.hocok.fortipass.presentation.authentication.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,6 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.hocok.fortipass.R
+import com.hocok.fortipass.presentation.ui.theme.backgroundColor
 import com.hocok.fortipass.presentation.ui.theme.secondColor
 
 @Composable
@@ -30,7 +32,10 @@ fun AuthContent(
         modifier = Modifier.fillMaxSize()
     ) {contentPadding ->
         Column(
-            modifier = modifier.padding(contentPadding).padding(horizontal = 20.dp),
+            modifier = modifier
+                .background(backgroundColor)
+                .padding(contentPadding)
+                .padding(horizontal = 20.dp),
             horizontalAlignment = Alignment.Start,
         ) {
             Spacer(Modifier.weight(1f))
